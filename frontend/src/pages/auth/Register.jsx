@@ -13,7 +13,7 @@ const Register = () => {
   const location = useLocation();
 
   // Pre-fill data passed from Login via Google One-Tap for new users
-  const googleState = location.state || {};
+  const [googleState, setGoogleState] = useState(location.state || {});
   const isGoogleFlow = !!googleState.googleCredential;
 
   const [formData, setFormData] = useState({
@@ -73,17 +73,19 @@ const Register = () => {
       navigate('/dashboard');
     } else if (res.requiresOnboarding) {
       // Stay on register page but pre-fill Google data
+      const onboardingState = {
+        googleCredential: response.credential,
+        googleName: res.googleName || googleState.googleName,
+        googleEmail: res.googleEmail || googleState.googleEmail,
+        googleAvatar: res.googleAvatar || googleState.googleAvatar
+      };
+
+      setGoogleState(onboardingState);
       setFormData(prev => ({
         ...prev,
-        name: res.googleName || prev.name,
-        email: res.googleEmail || prev.email
+        name: onboardingState.googleName || prev.name,
+        email: onboardingState.googleEmail || prev.email
       }));
-      // Store credential in a ref-style location for form submit
-      location.state = {
-        googleCredential: response.credential,
-        googleName: res.googleName,
-        googleEmail: res.googleEmail
-      };
       setError('');
     } else {
       setError(res.message || 'Google sign-in failed');
@@ -119,7 +121,7 @@ const Register = () => {
   return (
     <div className="flex-1 bg-background min-h-[calc(100vh-4rem)] flex items-center justify-center px-6 py-12">
       <div className="bg-white p-8 rounded-3xl border border-border shadow-2xl max-w-lg w-full relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary to-primary-light"></div>
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-linear-to-r from-primary to-primary-light"></div>
 
         <div className="flex flex-col items-center text-center mb-8">
           {/* Show Google avatar if coming from Google flow */}

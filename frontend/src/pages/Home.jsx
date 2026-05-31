@@ -16,16 +16,17 @@ const Home = () => {
           <div className="flex-1 text-center lg:text-left">
             <div className="inline-flex items-center gap-1.5 bg-red-50 text-primary border border-red-100 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-6 animate-pulse">
               <LuSparkles />
-              Real-time Emergency Response Platform
+              {t('home.heroTag')}
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-secondary tracking-tight leading-tight">
-              Bridging the Gap in <br />
+              {t('home.heroTitlePre')} <br />
               <span className="text-primary bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent">
-                Emergency Blood
-              </span> Need.
+                {t('home.heroTitleHighlight')}
+              </span>{' '}
+              {t('home.heroTitlePost')}
             </h1>
             <p className="text-base text-gray-500 max-w-lg mt-6 leading-relaxed">
-              BloodBridge is a real-time connector connecting patients, hospitals, and volunteers with verified blood donors instantly. Managed by an advanced accountability metrics system.
+              {t('home.heroDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8">
               {isAuthenticated ? (
@@ -33,7 +34,7 @@ const Home = () => {
                   to="/dashboard"
                   className="bg-primary hover:bg-primary-light text-white text-sm font-bold uppercase tracking-wider px-8 py-3.5 rounded-xl shadow-lg shadow-red-500/20 transition-all hover:-translate-y-0.5 active:translate-y-0"
                 >
-                  Go to {user?.role} Dashboard
+                  {t('home.goToDashboard', { role: user?.role })}
                 </Link>
               ) : (
                 <>
@@ -41,13 +42,13 @@ const Home = () => {
                     to="/register"
                     className="bg-primary hover:bg-primary-light text-white text-sm font-bold uppercase tracking-wider px-8 py-3.5 rounded-xl shadow-lg shadow-red-500/20 transition-all hover:-translate-y-0.5 active:translate-y-0"
                   >
-                    Register as Donor / Patient
+                    {t('home.registerAs')}
                   </Link>
                   <Link
                     to="/login"
                     className="bg-white hover:bg-red-50 border border-border hover:border-red-200 text-secondary text-sm font-bold uppercase tracking-wider px-8 py-3.5 rounded-xl transition-all hover:-translate-y-0.5 active:translate-y-0"
                   >
-                    Sign In
+                    {t('home.signIn')}
                   </Link>
                 </>
               )}
@@ -65,15 +66,15 @@ const Home = () => {
                   🥇
                 </div>
                 <div>
-                  <h4 className="font-bold text-secondary text-sm">Donor Reliability Score (DRS)</h4>
-                  <p className="text-[10px] text-gray-400 font-bold uppercase mt-0.5">Trust USP</p>
+                  <h4 className="font-bold text-secondary text-sm">{t('home.drsTitle')}</h4>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase mt-0.5">{t('home.drsSubtitle')}</p>
                 </div>
               </div>
               <p className="text-xs text-gray-500 leading-relaxed border-t border-border pt-4">
-                No more fake promises. Our proprietary DRS system tracks real donation logs, rewarding active heroes and ensuring real-time response accountability.
+                {t('home.drsDescription')}
               </p>
               <div className="bg-gray-50 p-3 rounded-xl border border-border flex items-center justify-between text-xs font-semibold">
-                <span className="text-gray-500">🏆 Start Score</span>
+                <span className="text-gray-500">🏆 {t('home.startScore')}</span>
                 <span className="text-primary font-extrabold">50 Points</span>
               </div>
             </div>
@@ -83,35 +84,35 @@ const Home = () => {
 
       {/* Trust Badges section */}
       <section className="py-16 border-t border-border max-w-5xl mx-auto px-6">
-        <h3 className="text-center text-xs font-extrabold uppercase tracking-widest text-primary mb-12">
-          How it Works
+          <h3 className="text-center text-xs font-extrabold uppercase tracking-widest text-primary mb-12">
+          {t('home.howItWorks')}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="p-6 rounded-2xl border border-border hover:border-red-200 transition-all hover:shadow-lg flex flex-col items-center text-center">
             <div className="h-12 w-12 bg-red-50 rounded-xl text-primary flex items-center justify-center text-xl mb-4 shadow-sm border border-red-100">
               <LuHeart />
             </div>
-            <h4 className="font-bold text-secondary text-base">Instant Donor Matching</h4>
+            <h4 className="font-bold text-secondary text-base">{t('home.instantDonorMatchingTitle')}</h4>
             <p className="text-xs text-gray-500 mt-2 leading-relaxed">
-              We query matching donors within your city, checking compatibility charts and sorted dynamically by reliability scores.
+              {t('home.instantDonorMatchingDescription')}
             </p>
           </div>
           <div className="p-6 rounded-2xl border border-border hover:border-red-200 transition-all hover:shadow-lg flex flex-col items-center text-center">
             <div className="h-12 w-12 bg-red-50 rounded-xl text-primary flex items-center justify-center text-xl mb-4 shadow-sm border border-red-100">
               <LuActivity />
             </div>
-            <h4 className="font-bold text-secondary text-base">Real-time Sockets</h4>
+            <h4 className="font-bold text-secondary text-base">{t('home.realtimeSocketsTitle')}</h4>
             <p className="text-xs text-gray-500 mt-2 leading-relaxed">
-              Hospital emergency rooms can trigger high-alert SOS signals broadcasting instant socket popups to O- and compatible groups.
+              {t('home.realtimeSocketsDescription')}
             </p>
           </div>
           <div className="p-6 rounded-2xl border border-border hover:border-red-200 transition-all hover:shadow-lg flex flex-col items-center text-center">
             <div className="h-12 w-12 bg-red-50 rounded-xl text-primary flex items-center justify-center text-xl mb-4 shadow-sm border border-red-100">
               <LuShieldCheck />
             </div>
-            <h4 className="font-bold text-secondary text-base">Security & Badges</h4>
+            <h4 className="font-bold text-secondary text-base">{t('home.securityBadgesTitle')}</h4>
             <p className="text-xs text-gray-500 mt-2 leading-relaxed">
-              Donor phones remain strictly hidden until confirm commitments. Earn Gold badges and unlock city achievements!
+              {t('home.securityBadgesDescription')}
             </p>
           </div>
         </div>
@@ -122,10 +123,10 @@ const Home = () => {
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
             <span className="text-xl">🩸</span>
-            <span className="font-bold tracking-wider">BloodBridge Platform</span>
+            <span className="font-bold tracking-wider">{t('home.footerTitle')}</span>
           </div>
           <p className="text-xs text-gray-400">
-            © 2026 Emergency Blood Connector System. Free humanitarian program.
+            {t('home.footerText')}
           </p>
         </div>
       </footer>

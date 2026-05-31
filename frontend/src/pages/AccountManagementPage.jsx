@@ -1,7 +1,9 @@
-import React, { useState, useContext, useRef, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import Navbar from '../components/common/Navbar';
 import api from '../services/api';
-import { LuLock, LuShield, LuCheck, LuInfo, LuUser, LuMail } from 'react-icons/lu';
+import { LuLock, LuShield, LuCheck, LuInfo, LuUser, LuMail, LuLayoutDashboard } from 'react-icons/lu';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -19,6 +21,7 @@ const AccountManagementPage = () => {
   const { user, updateUserProfile } = useContext(AuthContext);
 
   const [activeTab, setActiveTab] = useState('password'); // 'password' | 'google'
+  const [displayName, setDisplayName] = useState(user?.name || '');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -33,6 +36,10 @@ const AccountManagementPage = () => {
   useEffect(() => {
     if (isGoogleOnly) setActiveTab('google');
   }, [isGoogleOnly]);
+
+  useEffect(() => {
+    setDisplayName(user?.name || '');
+  }, [user]);
 
   const handleGoogleVerification = (response) => {
     const credential = response.credential;
@@ -83,7 +90,38 @@ const AccountManagementPage = () => {
     setTimeout(() => document.body.removeChild(tempDiv), 500);
   };
 
-  const handleSubmit = async (e) => {
+  const handleNameSubmit = async (e) => {
+    e.preventDefault();
+    setStatus(null);
+
+    const trimmedName = displayName.trim();
+    if (!trimmedName) {
+      setStatus({ type: 'error', message: 'Name cannot be empty.' });
+      return;
+    }
+
+    if (trimmedName === user?.name) {
+      setStatus({ type: 'success', message: 'Name is already up to date.' });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await api.put('/auth/profile', { name: trimmedName });
+      if (res.data.success) {
+        updateUserProfile(res.data.data);
+        setDisplayName(res.data.data.name || trimmedName);
+        setStatus({ type: 'success', message: 'Profile name updated successfully.' });
+      } else {
+        setStatus({ type: 'error', message: res.data.message || 'Failed to update name.' });
+      }
+    } catch (err) {
+      setStatus({ type: 'error', message: err.response?.data?.message || 'An error occurred. Please try again.' });
+    }
+    setLoading(false);
+  };
+
+  const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     setStatus(null);
 
@@ -130,42 +168,94 @@ const AccountManagementPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-start justify-center px-4 py-10">
-      <div className="w-full max-w-xl">
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <div className="flex items-start justify-center px-4 py-10">
+        <div className="w-full max-w-xl">
 
         {/* ── Header Card ── */}
-        <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-5 flex items-center gap-4">
-          {user?.avatar ? (
-            <img src={user.avatar} alt={user.name} className="w-14 h-14 rounded-full border-2 border-primary/20 shadow" />
-          ) : (
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center">
-              <LuUser className="text-primary text-2xl" />
-            </div>
-          )}
-          <div>
-            <h1 className="text-xl font-bold text-secondary">{user?.name}</h1>
-            <p className="text-sm text-gray-500 flex items-center gap-1.5 mt-0.5">
-              <LuMail className="text-gray-400" /> {user?.email}
-            </p>
-            <div className="flex items-center gap-2 mt-1.5">
-              {user?.isGoogleUser && (
-                <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-100">
-                  <svg width="10" height="10" viewBox="0 0 48 48" className="inline">
-                    <path fill="#EA4335" d="M24 9.5c3.4 0 6.4 1.2 8.8 3.1l6.6-6.6C35.2 2.5 29.9 0 24 0 14.8 0 6.9 5.4 3 13.3l7.7 6C12.5 13.1 17.8 9.5 24 9.5z"/>
-                    <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8C43.7 37.5 46.5 31.4 46.5 24.5z"/>
-                    <path fill="#FBBC05" d="M10.7 28.7A14.6 14.6 0 019.5 24c0-1.6.3-3.2.8-4.7L2.6 13.3A23.8 23.8 0 000 24c0 3.8.9 7.4 2.5 10.6l8.2-5.9z"/>
-                    <path fill="#34A853" d="M24 48c6 0 11-2 14.7-5.3l-7.5-5.8c-2 1.3-4.6 2.1-7.2 2.1-6.2 0-11.5-3.6-13.3-9.3l-8 6.1C6.8 42.6 14.8 48 24 48z"/>
-                  </svg>
-                  Google Linked
-                </span>
-              )}
-              {!user?.hasPasswordSet && (
-                <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-100">
-                  ⚠️ No Password Set
-                </span>
-              )}
+        <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            {user?.avatar ? (
+              <img src={user.avatar} alt={user.name} className="w-14 h-14 rounded-full border-2 border-primary/20 shadow" />
+            ) : (
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center">
+                <LuUser className="text-primary text-2xl" />
+              </div>
+            )}
+            <div>
+              <h1 className="text-xl font-bold text-secondary">{user?.name}</h1>
+              <p className="text-sm text-gray-500 flex items-center gap-1.5 mt-0.5">
+                <LuMail className="text-gray-400" /> {user?.email}
+              </p>
+              <div className="flex items-center gap-2 mt-1.5">
+                {user?.isGoogleUser && (
+                  <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-100">
+                    <svg width="10" height="10" viewBox="0 0 48 48" className="inline">
+                      <path fill="#EA4335" d="M24 9.5c3.4 0 6.4 1.2 8.8 3.1l6.6-6.6C35.2 2.5 29.9 0 24 0 14.8 0 6.9 5.4 3 13.3l7.7 6C12.5 13.1 17.8 9.5 24 9.5z"/>
+                      <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8C43.7 37.5 46.5 31.4 46.5 24.5z"/>
+                      <path fill="#FBBC05" d="M10.7 28.7A14.6 14.6 0 019.5 24c0-1.6.3-3.2.8-4.7L2.6 13.3A23.8 23.8 0 000 24c0 3.8.9 7.4 2.5 10.6l8.2-5.9z"/>
+                      <path fill="#34A853" d="M24 48c6 0 11-2 14.7-5.3l-7.5-5.8c-2 1.3-4.6 2.1-7.2 2.1-6.2 0-11.5-3.6-13.3-9.3l-8 6.1C6.8 42.6 14.8 48 24 48z"/>
+                    </svg>
+                    Google Linked
+                  </span>
+                )}
+                {!user?.hasPasswordSet && (
+                  <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-100">
+                    ⚠️ No Password Set
+                  </span>
+                )}
+              </div>
             </div>
           </div>
+
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-gray-50 px-4 py-2 text-xs font-bold uppercase tracking-wider text-secondary hover:border-primary hover:text-primary hover:bg-red-50 transition-colors"
+          >
+            <LuLayoutDashboard className="text-sm" />
+            Dashboard
+          </Link>
+        </div>
+
+        {/* ── Profile Details Card ── */}
+        <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden mb-5">
+          <div className="px-6 pt-6 pb-4 border-b border-border">
+            <h2 className="text-base font-bold text-secondary flex items-center gap-2">
+              <LuUser className="text-primary" />
+              Profile Details
+            </h2>
+            <p className="text-xs text-gray-400 mt-1">
+              Update the name shown across your BloodBridge profile.
+            </p>
+          </div>
+
+          <form onSubmit={handleNameSubmit} className="p-6 flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-secondary uppercase tracking-wider">
+                Full Name
+              </label>
+              <div className="relative flex items-center">
+                <LuUser className="absolute left-4 text-gray-400" />
+                <input
+                  type="text"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  placeholder="Enter your display name"
+                  className="w-full bg-gray-50 border border-border focus:border-primary focus:bg-white rounded-xl pl-11 pr-4 py-3 text-sm font-medium outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-secondary hover:bg-secondary/90 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold uppercase tracking-wider text-xs py-4 rounded-xl shadow-lg transition-all transform active:scale-[0.98] flex items-center justify-center gap-2"
+            >
+              <LuUser className="text-base" />
+              {loading ? 'Saving Name...' : 'Save Name'}
+            </button>
+          </form>
         </div>
 
         {/* ── Password & Security Card ── */}
@@ -219,7 +309,7 @@ const AccountManagementPage = () => {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-5">
+          <form onSubmit={handlePasswordSubmit} className="p-6 flex flex-col gap-5">
 
             {/* ── Tab A: Verify via Current Password ── */}
             {activeTab === 'password' && (
@@ -342,6 +432,7 @@ const AccountManagementPage = () => {
               {loading ? 'Updating Password...' : (isGoogleOnly ? 'Set My Password' : 'Update Password')}
             </button>
           </form>
+        </div>
         </div>
       </div>
     </div>

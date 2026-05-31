@@ -106,12 +106,8 @@ const RequesterDashboard = () => {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-4">
             <div>
-              <h2 className="text-xl font-bold text-secondary flex items-center gap-2">
-                🏠 My Requests Dashboard
-              </h2>
-              <p className="text-xs text-gray-500 mt-1">
-                Post and coordinate active blood requests.
-              </p>
+              <h2 className="text-xl font-bold text-secondary flex items-center gap-2">🏠 {t('request.dashboardTitle')}</h2>
+              <p className="text-xs text-gray-500 mt-1">{t('request.dashboardSubtitle')}</p>
             </div>
             <Link
               to="/requests/post"
@@ -124,15 +120,13 @@ const RequesterDashboard = () => {
 
           {loading ? (
             <div className="p-8 text-center text-xs text-muted">
-              Loading requests details...
+              {t('request.loadingDashboard')}
             </div>
           ) : myRequests.length === 0 ? (
             <div className="flex flex-col items-center justify-center text-center p-8 bg-white border border-border rounded-2xl min-h-80 shadow-sm">
               <span className="text-4xl mb-3">📋</span>
-              <h3 className="font-extrabold text-secondary text-sm">No Requests Posted</h3>
-              <p className="text-xs text-gray-400 max-w-xs mt-1 leading-relaxed">
-                You have not posted any blood requests yet. Click the "Post Request" button to submit an emergency query.
-              </p>
+              <h3 className="font-extrabold text-secondary text-sm">{t('request.noRequestsTitle')}</h3>
+              <p className="text-xs text-gray-400 max-w-xs mt-1 leading-relaxed">{t('request.noRequestsDescription')}</p>
             </div>
           ) : (
             <div className="flex flex-col gap-6">

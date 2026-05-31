@@ -115,11 +115,11 @@ const HospitalDashboard = () => {
 
               {loading ? (
                 <div className="flex-1 flex items-center justify-center text-xs text-muted">
-                  Loading stock data...
+                  {t('hospital.loadingStock', 'Loading stock data...')}
                 </div>
               ) : bloodBanks.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center text-xs text-muted p-6">
-                  No blood bank directory entries listed in your city yet
+                  {t('hospital.noBanks', 'No blood bank directory entries listed in your city yet')}
                 </div>
               ) : (
                 <div className="flex flex-col gap-3 max-h-40 overflow-y-auto pr-1">
@@ -159,12 +159,12 @@ const HospitalDashboard = () => {
 
             {loading ? (
               <div className="p-8 text-center text-xs text-muted">
-                Loading requests...
+                {t('hospital.loadingRequests', 'Loading requests...')}
               </div>
             ) : requests.length === 0 ? (
               <div className="p-8 text-center text-xs text-muted flex flex-col items-center justify-center min-h-40">
                 <span>📋</span>
-                <p className="mt-1">No requests posted by your institution yet.</p>
+                <p className="mt-1">{t('hospital.noRequests', 'No requests posted by your institution yet.')}</p>
               </div>
             ) : (
               <div className="flex flex-col gap-4">
@@ -194,13 +194,13 @@ const HospitalDashboard = () => {
                             onClick={() => handleSOS(req._id)}
                             className="bg-primary hover:bg-primary-light text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-1"
                           >
-                            <LuFlame className="text-xs" /> Trigger SOS
+                            <LuFlame className="text-xs" /> {t('request.triggerSOS')}
                           </button>
                           <Link
                             to={`/requests/${req._id}/matches`}
                             className="bg-secondary hover:bg-secondary/90 text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-lg shadow-sm transition-all"
                           >
-                            View Matches
+                            {t('request.viewMatches', { count: req.respondedDonors?.length || 0 })}
                           </Link>
                         </>
                       )}
@@ -209,7 +209,7 @@ const HospitalDashboard = () => {
                           to="/dashboard"
                           className="bg-success text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-lg shadow-sm transition-all"
                         >
-                          Manage Donor
+                          {t('hospital.manageDonor', 'Manage Donor')}
                         </Link>
                       )}
                       {req.status === 'fulfilled' && (

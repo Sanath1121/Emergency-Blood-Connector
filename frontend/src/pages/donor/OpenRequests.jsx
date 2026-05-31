@@ -95,32 +95,26 @@ const OpenRequests = () => {
         <main className="flex-1 p-6 max-w-6xl mx-auto flex flex-col gap-6">
           <div className="flex justify-between items-center border-b border-border pb-4">
             <div>
-              <h2 className="text-xl font-bold text-secondary flex items-center gap-2">
-                🩸 Open Emergency Requests
-              </h2>
-              <p className="text-xs text-gray-500 mt-1">
-                Showing compatible blood requests in **{user?.city}** for your **{user?.bloodType}** blood group.
-              </p>
+              <h2 className="text-xl font-bold text-secondary flex items-center gap-2">🩸 {t('request.openTitle', 'Open Emergency Requests')}</h2>
+              <p className="text-xs text-gray-500 mt-1">{t('request.openSubtitle', 'Showing compatible blood requests in {{city}} for your {{bloodType}} blood group.', { city: user?.city, bloodType: user?.bloodType })}</p>
             </div>
             <button
               onClick={fetchRequests}
               className="bg-gray-100 hover:bg-gray-200 border border-border text-secondary text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-lg transition-all"
             >
-              Refresh List
+              {t('common.refresh')}
             </button>
           </div>
 
           {loading ? (
             <div className="p-8 text-center text-xs text-muted">
-              Searching matching emergency requests...
+              {t('request.loadingOpenRequests')}
             </div>
           ) : requests.length === 0 ? (
             <div className="flex flex-col items-center justify-center text-center p-8 bg-white border border-border rounded-2xl min-h-80 shadow-sm">
               <span className="text-4xl mb-3">🕊️</span>
-              <h3 className="font-extrabold text-secondary text-sm">No Open Requests In Your Area</h3>
-              <p className="text-xs text-gray-400 max-w-xs mt-1 leading-relaxed">
-                Splendid news! There are currently no emergency compatibility requests matching your city. Thank you for staying alert.
-              </p>
+              <h3 className="font-extrabold text-secondary text-sm">{t('request.noOpenRequestsTitle')}</h3>
+              <p className="text-xs text-gray-400 max-w-xs mt-1 leading-relaxed">{t('request.noOpenRequestsDescription')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -154,10 +148,10 @@ const OpenRequests = () => {
                         </div>
                         <div>
                           <h3 className="font-extrabold text-secondary text-sm">
-                            Patient: {req.patientName}
+                            {t('request.patient')}: {req.patientName}
                           </h3>
                           <span className="text-[10px] text-gray-400 font-bold block uppercase tracking-wider mt-0.5">
-                            Required: {req.unitsRequired} Units
+                            {t('request.unitsPrefix')}: {req.unitsRequired} Units
                           </span>
                         </div>
                       </div>
@@ -170,7 +164,7 @@ const OpenRequests = () => {
                         </span>
                         <span className="flex items-center gap-1.5">
                           <LuActivity className="text-gray-400" />
-                          ⏰ Posted on {new Date(req.createdAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                          ⏰ {t('request.postedOn', 'Posted on')} {new Date(req.createdAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
                         </span>
                       </div>
                     </div>
@@ -179,7 +173,7 @@ const OpenRequests = () => {
                       {/* Blood donation accept/status */}
                       {alreadyResponded ? (
                         <span className="px-4 py-2 border border-success bg-green-50 text-success text-[10px] font-extrabold uppercase tracking-widest rounded-xl">
-                          ✓ Commitment Registered
+                          ✓ {t('request.commitmentRegistered', 'Commitment Registered')}
                         </span>
                       ) : (
                         <button
@@ -187,14 +181,14 @@ const OpenRequests = () => {
                           disabled={user?.availability === 'on_cooldown' || acceptingId === req._id}
                           className="bg-primary hover:bg-primary-light disabled:bg-gray-300 text-white text-[10px] font-extrabold uppercase tracking-widest px-5 py-2.5 rounded-xl shadow-md transition-all transform active:scale-95"
                         >
-                          {acceptingId === req._id ? 'Accepting...' : 'Accept Request'}
+                          {acceptingId === req._id ? t('common.loading') : t('donor.accept')}
                         </button>
                       )}
 
                       {/* Coordinate button */}
                       {req.coordinator && req.coordinator === user?._id ? (
                         <span className="px-4 py-2 border border-blue-200 bg-blue-50 text-blue-600 text-[10px] font-extrabold uppercase tracking-widest rounded-xl">
-                          🤝 You are Coordinating
+                          🤝 {t('request.youAreCoordinating', 'You are Coordinating')}
                         </span>
                       ) : !req.coordinator ? (
                         <button
@@ -202,7 +196,7 @@ const OpenRequests = () => {
                           disabled={coordinatingId === req._id}
                           className="bg-secondary hover:bg-secondary/90 disabled:bg-gray-300 text-white text-[10px] font-extrabold uppercase tracking-widest px-5 py-2.5 rounded-xl shadow-md transition-all transform active:scale-95"
                         >
-                          {coordinatingId === req._id ? 'Registering...' : '🤝 Help Coordinate'}
+                          {coordinatingId === req._id ? t('common.loading') : `🤝 ${t('request.helpCoordinate', 'Help Coordinate')}`}
                         </button>
                       ) : null}
                     </div>

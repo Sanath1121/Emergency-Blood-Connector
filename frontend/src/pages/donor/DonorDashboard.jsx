@@ -81,12 +81,8 @@ const DonorDashboard = () => {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-border shadow-sm">
             <div>
-              <h2 className="text-xl font-bold text-secondary">
-                Welcome back, {user?.name}! 🩸
-              </h2>
-              <p className="text-xs text-gray-500 mt-1">
-                You are registered as a **{user?.bloodType}** donor in **{user?.city}**.
-              </p>
+              <h2 className="text-xl font-bold text-secondary">{t('donor.welcomeBack', { name: user?.name })}</h2>
+              <p className="text-xs text-gray-500 mt-1">{t('donor.registeredAs', { bloodType: user?.bloodType, city: user?.city })}</p>
             </div>
             <DRSBadge score={user?.drsScore || 50} />
           </div>
@@ -96,13 +92,11 @@ const DonorDashboard = () => {
             <div className="bg-orange-50 border border-orange-200 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center gap-3 border-l-4 border-l-orange-500 shadow-sm">
               <span className="text-2xl">⏳</span>
               <div className="flex-1">
-                <h4 className="font-bold text-orange-900 text-sm">Cooldown Period Active</h4>
-                <p className="text-xs text-orange-700 mt-0.5 leading-relaxed">
-                  Thank you for your recent lifesaving donation! To preserve donor health, you must wait full 90 days before your next donation.
-                </p>
+                <h4 className="font-bold text-orange-900 text-sm">{t('donor.cooldownTitle')}</h4>
+                <p className="text-xs text-orange-700 mt-0.5 leading-relaxed">{t('donor.cooldownDescription')}</p>
               </div>
               <span className="px-4 py-2 bg-orange-100 border border-orange-200 text-orange-800 text-xs font-extrabold rounded-lg whitespace-nowrap self-start sm:self-center">
-                {cooldownDays} Days Remaining
+                {t('donor.daysRemaining', { count: cooldownDays })}
               </span>
             </div>
           )}
@@ -115,7 +109,7 @@ const DonorDashboard = () => {
               </div>
               <div>
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  Total Donations
+                  {t('donor.totalDonations')}
                 </span>
                 <h3 className="text-xl font-extrabold text-secondary mt-0.5">
                   {user?.totalDonations || 0}
@@ -129,7 +123,7 @@ const DonorDashboard = () => {
               </div>
               <div>
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  Availability
+                  {t('donor.availabilityLabel')}
                 </span>
                 <h3 className="text-sm font-bold text-secondary capitalize mt-1">
                   {user?.availability === 'available' ? (
@@ -149,11 +143,11 @@ const DonorDashboard = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block">
-                  Milestone Badges
+                  {t('donor.milestoneBadges')}
                 </span>
                 <div className="flex flex-wrap gap-1.5 mt-1.5">
                   {user?.badges?.length === 0 ? (
-                    <span className="text-xs text-gray-400">No badges awarded yet. Complete a donation to unlock!</span>
+                    <span className="text-xs text-gray-400">{t('donor.noBadges')}</span>
                   ) : (
                     user?.badges?.map((badge, idx) => (
                       <span
@@ -177,31 +171,29 @@ const DonorDashboard = () => {
               <div className="flex items-center gap-2 border-b border-border pb-4 mb-4">
                 <LuTrophy className="text-primary text-xl" />
                 <h3 className="font-bold text-secondary text-sm uppercase tracking-wider">
-                  Mumbai City Leaderboard 🏆
+                  {t('donor.leaderboardTitle')}
                 </h3>
               </div>
 
               {!user?.showOnLeaderboard ? (
                 <div className="flex-1 flex flex-col items-center justify-center text-center p-6 bg-gray-50 border border-dashed border-border rounded-xl">
                   <span className="text-3xl mb-3">👁️</span>
-                  <h4 className="font-bold text-secondary text-sm">Leaderboard Opt-In Required</h4>
-                  <p className="text-xs text-gray-500 max-w-xs mt-1 leading-relaxed">
-                    Would you like to compete with other lifesavers in your city? Opt in to show your name and total donations on the leaderboard.
-                  </p>
+                  <h4 className="font-bold text-secondary text-sm">{t('donor.leaderboardOptInRequiredTitle')}</h4>
+                  <p className="text-xs text-gray-500 max-w-xs mt-1 leading-relaxed">{t('donor.leaderboardOptInRequiredDescription')}</p>
                   <button
                     onClick={handleOptIn}
                     className="mt-4 bg-primary hover:bg-primary-light text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-lg shadow-md transform active:scale-95 transition-all"
                   >
-                    Opt In Now
+                    {t('donor.leaderboardOptInButton')}
                   </button>
                 </div>
               ) : loadingLeaderboard ? (
                 <div className="flex-1 flex items-center justify-center text-xs text-muted">
-                  Loading leaderboard...
+                  {t('donor.loadingLeaderboard')}
                 </div>
               ) : leaderboard.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center text-xs text-muted">
-                  No other donors on leaderboard in Mumbai yet
+                  {t('donor.noOtherDonors', { city: user?.city })}
                 </div>
               ) : (
                 <div className="flex flex-col gap-2.5">
@@ -249,20 +241,20 @@ const DonorDashboard = () => {
               <div className="flex items-center gap-2 border-b border-border pb-4 mb-4">
                 <LuActivity className="text-primary text-xl" />
                 <h3 className="font-bold text-secondary text-sm uppercase tracking-wider">
-                  Recent Response Commitments
+                  {t('donor.recentResponsesTitle')}
                 </h3>
               </div>
 
               {loadingResponses ? (
                 <div className="flex-1 flex items-center justify-center text-xs text-muted">
-                  Loading responses...
+                  {t('donor.loadingResponses')}
                 </div>
               ) : recentResponses.length === 0 ? (
                 <div className="flex-1 flex flex-col items-center justify-center text-center p-6 bg-gray-50 border border-dashed border-border rounded-xl">
                   <span className="text-3xl mb-2">🩹</span>
-                  <h4 className="font-bold text-secondary text-xs">No Active Commitments</h4>
+                  <h4 className="font-bold text-secondary text-xs">{t('donor.noResponsesTitle', 'No Active Commitments')}</h4>
                   <p className="text-[10px] text-gray-500 max-w-xs mt-0.5 leading-relaxed">
-                    Check the "Requests" page in your sidebar to accept open compatible blood requests in your city.
+                    {t('donor.noResponsesDescription', 'Check the "Requests" page in your sidebar to accept open compatible blood requests in your city.')}
                   </p>
                 </div>
               ) : (
@@ -274,13 +266,13 @@ const DonorDashboard = () => {
                     >
                       <div className="flex flex-col">
                         <span className="text-xs font-bold text-secondary">
-                          Patient: {req.patientName} ({req.bloodType})
+                          {t('request.patient')}: {req.patientName} ({req.bloodType})
                         </span>
                         <span className="text-[10px] text-gray-400 font-semibold mt-0.5">
-                          Hospital: {req.hospitalName}, {req.city}
+                          {t('request.hospital')}: {req.hospitalName}, {req.city}
                         </span>
                         <span className="text-[9px] text-gray-400 mt-0.5">
-                          Posted on {new Date(req.createdAt).toLocaleDateString()}
+                          {t('request.postedOn', 'Posted on')} {new Date(req.createdAt).toLocaleDateString()}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 self-start sm:self-center">

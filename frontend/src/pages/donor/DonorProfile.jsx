@@ -97,9 +97,7 @@ const DonorProfile = () => {
       <div className="flex">
         <Sidebar />
         <main className="flex-1 p-6 max-w-6xl mx-auto flex flex-col gap-6">
-          <h2 className="text-xl font-bold text-secondary flex items-center gap-2">
-            👤 My Donor Profile
-          </h2>
+          <h2 className="text-xl font-bold text-secondary flex items-center gap-2">👤 {t('donor.profileTitle', 'My Donor Profile')}</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left side settings & Availability */}
@@ -119,10 +117,10 @@ const DonorProfile = () => {
                   <div className="flex justify-between items-center">
                     <div className="text-left">
                       <span className="text-xs font-bold text-secondary uppercase tracking-wider block">
-                        Availability Status
+                        {t('donor.availabilityStatus', 'Availability Status')}
                       </span>
                       <span className="text-[10px] text-gray-400 font-semibold block mt-0.5">
-                        Can coordinate emergency needs
+                        {t('donor.availabilityHelp', 'Can coordinate emergency needs')}
                       </span>
                     </div>
 
@@ -142,7 +140,7 @@ const DonorProfile = () => {
                   </div>
 
                   <div className="bg-gray-50 border border-border p-3 rounded-xl flex items-center justify-between text-xs font-semibold text-left">
-                    <span className="text-gray-500">Current State</span>
+                    <span className="text-gray-500">{t('donor.currentState', 'Current State')}</span>
                     <span
                       className={`font-bold ${
                         user?.availability === 'available'
@@ -153,10 +151,10 @@ const DonorProfile = () => {
                       }`}
                     >
                       {user?.availability === 'available'
-                        ? 'Available'
+                        ? t('donor.available')
                         : user?.availability === 'on_cooldown'
-                        ? 'On Cooldown'
-                        : 'Unavailable'}
+                        ? t('donor.onCooldown')
+                        : t('donor.unavailable')}
                     </span>
                   </div>
                 </div>
@@ -166,15 +164,13 @@ const DonorProfile = () => {
               <div className="bg-white p-6 rounded-2xl border border-border shadow-sm flex flex-col">
                 <div className="flex items-center gap-2 border-b border-border pb-3 mb-4">
                   <LuSettings className="text-primary text-lg" />
-                  <h3 className="font-bold text-secondary text-xs uppercase tracking-wider">
-                    Edit Profile Details
-                  </h3>
+                    <h3 className="font-bold text-secondary text-xs uppercase tracking-wider">{t('donor.editProfileDetails', 'Edit Profile Details')}</h3>
                 </div>
 
                 <form onSubmit={handleUpdate} className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1">
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                      Full Name
+                      {t('auth.name')}
                     </label>
                     <div className="relative flex items-center">
                       <LuUser className="absolute left-3.5 text-gray-400 text-sm" />
@@ -191,7 +187,7 @@ const DonorProfile = () => {
 
                   <div className="flex flex-col gap-1">
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                      City
+                      {t('auth.city')}
                     </label>
                     <div className="relative flex items-center">
                       <LuMapPin className="absolute left-3.5 text-gray-400 text-sm" />
@@ -208,7 +204,7 @@ const DonorProfile = () => {
 
                   <div className="flex flex-col gap-1">
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                      Phone Number
+                      {t('auth.phone')}
                     </label>
                     <div className="relative flex items-center">
                       <LuPhone className="absolute left-3.5 text-gray-400 text-sm" />
@@ -232,7 +228,7 @@ const DonorProfile = () => {
                       className="accent-primary rounded h-4 w-4 border-border"
                     />
                     <span className="text-[11px] font-semibold text-secondary">
-                      Opt-in on City Leaderboard
+                      {t('donor.optInLeaderboard', 'Opt-in on City Leaderboard')}
                     </span>
                   </label>
 
@@ -241,7 +237,7 @@ const DonorProfile = () => {
                     disabled={updatingProfile}
                     className="w-full bg-primary hover:bg-primary-light disabled:bg-gray-400 text-white font-bold uppercase tracking-wider text-[10px] py-3 rounded-xl shadow-md transition-all mt-2 transform active:scale-95"
                   >
-                    {updatingProfile ? 'Saving...' : 'Save Profile Settings'}
+                    {updatingProfile ? t('common.loading') : t('donor.saveProfileSettings', 'Save Profile Settings')}
                   </button>
                 </form>
               </div>
@@ -252,20 +248,20 @@ const DonorProfile = () => {
               <div className="flex items-center gap-2 border-b border-border pb-4 mb-4">
                 <LuHistory className="text-primary text-lg" />
                 <h3 className="font-bold text-secondary text-xs uppercase tracking-wider">
-                  Donation Activity History Log
+                  {t('donor.historyTitle', 'Donation Activity History Log')}
                 </h3>
               </div>
 
               {loadingHistory ? (
                 <div className="p-8 text-center text-xs text-muted">
-                  Loading donation history...
+                  {t('donor.loadingHistory', 'Loading donation history...')}
                 </div>
               ) : history.length === 0 ? (
                 <div className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-gray-50 border border-dashed border-border rounded-xl min-h-60">
                   <span className="text-4xl mb-3 animate-pulse">🩸</span>
-                  <h4 className="font-bold text-secondary text-sm">No Donation History Yet</h4>
+                  <h4 className="font-bold text-secondary text-sm">{t('donor.noHistoryTitle', 'No Donation History Yet')}</h4>
                   <p className="text-xs text-gray-500 max-w-xs mt-1 leading-relaxed">
-                    Once you accept a blood request, show up, and the requester confirms your donation, it will show up in this permanent log!
+                    {t('donor.noHistoryDescription', 'Once you accept a blood request, show up, and the requester confirms your donation, it will show up in this permanent log!')}
                   </p>
                 </div>
               ) : (
@@ -273,11 +269,11 @@ const DonorProfile = () => {
                   <table className="w-full text-left text-xs">
                     <thead>
                       <tr className="border-b border-border bg-gray-50 font-bold text-gray-400 uppercase tracking-widest text-[9px]">
-                        <th className="p-3">Date</th>
-                        <th className="p-3">Patient</th>
-                        <th className="p-3">Hospital</th>
-                        <th className="p-3">DRS Impact</th>
-                        <th className="p-3">Outcome</th>
+                        <th className="p-3">{t('donor.date', 'Date')}</th>
+                        <th className="p-3">{t('request.patient')}</th>
+                        <th className="p-3">{t('request.hospital')}</th>
+                        <th className="p-3">{t('donor.drsImpact', 'DRS Impact')}</th>
+                        <th className="p-3">{t('donor.outcome', 'Outcome')}</th>
                       </tr>
                     </thead>
                     <tbody>

@@ -219,10 +219,37 @@ const getMe = async (req, res) => {
   }
 };
 
+// @desc    Update current user profile name
+// @route   PUT /api/auth/profile
+// @access  Private
+const updateProfile = async (req, res) => {
+  try {
+    const { name } = req.body;
+    const user = await User.findById(req.user._id).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const trimmedName = typeof name === 'string' ? name.trim() : '';
+    if (!trimmedName) {
+      return res.status(400).json({ success: false, message: 'Name is required' });
+    }
+
+    user.name = trimmedName;
+    await user.save();
+
+    res.json({ success: true, message: 'Name updated successfully', data: user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   register,
   login,
   googleSignin,
   changePassword,
-  getMe
+  getMe,
+  updateProfile
 };
