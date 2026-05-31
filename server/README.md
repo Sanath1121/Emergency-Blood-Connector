@@ -1,4 +1,4 @@
-# BloodBridge — Backend (Server)
+# BloodBridge - Backend (Server)
 
 Node.js + Express.js REST API with Socket.io real-time layer and MongoDB database.
 
@@ -142,7 +142,7 @@ outcome     String    enum: ['donated', 'cancelled_by_donor', 'no_show']
 
 ## API Routes
 
-### Auth — `/api/auth`
+### Auth - `/api/auth`
 | Method | Route | Access | Description |
 |---|---|---|---|
 | POST | `/register` | Public | Register with role, email, password |
@@ -151,7 +151,7 @@ outcome     String    enum: ['donated', 'cancelled_by_donor', 'no_show']
 | GET | `/me` | Private | Get current logged-in user |
 | PUT | `/me/password` | Private | Set or change password |
 
-### Donors — `/api/donors`
+### Donors - `/api/donors`
 | Method | Route | Access | Description |
 |---|---|---|---|
 | GET | `/` | Private | All available donors (filter: city, bloodType) |
@@ -162,7 +162,7 @@ outcome     String    enum: ['donated', 'cancelled_by_donor', 'no_show']
 | GET | `/my/requests` | Donor | Requests donor has responded to |
 | GET | `/my/history` | Donor | Full donation history |
 
-### Blood Requests — `/api/requests`
+### Blood Requests - `/api/requests`
 | Method | Route | Access | Description |
 |---|---|---|---|
 | POST | `/` | Requester, Hospital | Post new blood request |
@@ -176,7 +176,7 @@ outcome     String    enum: ['donated', 'cancelled_by_donor', 'no_show']
 | POST | `/:id/sos` | Admin, Hospital | Broadcast SOS to all eligible city donors |
 | PUT | `/:id/coordinate` | Donor | Self-assign as request coordinator |
 
-### Blood Banks — `/api/bloodbanks`
+### Blood Banks - `/api/bloodbanks`
 | Method | Route | Access | Description |
 |---|---|---|---|
 | GET | `/` | Public | All blood banks (filter: city) |
@@ -185,7 +185,7 @@ outcome     String    enum: ['donated', 'cancelled_by_donor', 'no_show']
 | PUT | `/:id` | Admin | Update blood bank + inventory |
 | DELETE | `/:id` | Admin | Delete blood bank |
 
-### Notifications — `/api/notifications`
+### Notifications - `/api/notifications`
 | Method | Route | Access | Description |
 |---|---|---|---|
 | GET | `/` | Private | All notifications for current user |
@@ -193,7 +193,7 @@ outcome     String    enum: ['donated', 'cancelled_by_donor', 'no_show']
 | PUT | `/read-all` | Private | Mark all as read |
 | DELETE | `/:id` | Private | Delete a notification |
 
-### Admin — `/api/admin`
+### Admin - `/api/admin`
 | Method | Route | Access | Description |
 |---|---|---|---|
 | GET | `/users` | Admin | All users (filter: role, city, search) |
@@ -206,12 +206,12 @@ outcome     String    enum: ['donated', 'cancelled_by_donor', 'no_show']
 
 ## Middleware
 
-### `authMiddleware.js` — `protect`
+### `authMiddleware.js` - `protect`
 Verifies the JWT token from the `Authorization: Bearer <token>` header.
 Attaches the full user object to `req.user`.
 Returns `401` if missing or invalid.
 
-### `roleMiddleware.js` — `authorize(...roles)`
+### `roleMiddleware.js` - `authorize(...roles)`
 Checks that `req.user.role` is in the allowed roles list.
 Returns `403` if the role is not permitted.
 
@@ -281,14 +281,14 @@ Used in: donor matching, request notifications, SOS broadcasts.
 
 ## Background Jobs (node-cron)
 
-### Hourly Cooldown Lift — `0 * * * *`
+### Hourly Cooldown Lift - `0 * * * *`
 Finds all donors whose `cooldownUntil` has passed.
 Sets `availability = 'available'`, `cooldownUntil = null`.
 Sends notification + socket event to each donor.
 
 Also runs on every incoming HTTP request (on-access check) to catch cases between cron ticks.
 
-### Coordination Nudge — `*/5 * * * *`
+### Coordination Nudge - `*/5 * * * *`
 Finds active requests (`open` or `matched`) with:
 - `coordinator = null`
 - `coordinationNudgeSent = false`
@@ -310,7 +310,7 @@ When a requester views matched donors for their request:
 1. Filter donors: `role='donor'`, same `city`, `availability='available'`, `isVerified=true`, `isActive=true`
 2. Filter by blood compatibility using `isCompatible(donor.bloodType, request.bloodType)`
 3. Sort descending by `drsScore`
-4. Return top 10 — phone hidden until donor is confirmed by requester
+4. Return top 10 - phone hidden until donor is confirmed by requester
 
 ---
 
@@ -337,7 +337,7 @@ Stored in `user.badges[]`. Notification fires when milestone is reached.
 4. Build command: `npm install`
 5. Start command: `npm start`
 6. Add environment variables (PORT, MONGO_URI, JWT_SECRET, CLIENT_URL)
-7. Deploy — Render provides a stable HTTPS URL
+7. Deploy - Render provides a stable HTTPS URL
 
 ---
 

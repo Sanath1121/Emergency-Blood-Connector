@@ -1,4 +1,4 @@
-# 🩸 BloodBridge — Emergency Blood Connector
+# 🩸 BloodBridge - Emergency Blood Connector
 
 > Connecting blood donors, patients, and hospitals instantly when every second counts.
 
@@ -6,9 +6,9 @@
 
 ## What is BloodBridge?
 
-BloodBridge is a real-time emergency blood coordination platform built to solve one of the most urgent problems in healthcare — **finding the right blood donor at the right time**.
+BloodBridge is a real-time emergency blood coordination platform built to solve one of the most urgent problems in healthcare - **finding the right blood donor at the right time**.
 
-When a patient needs blood urgently, family members often spend precious hours making phone calls, visiting blood banks, and hoping for the best. BloodBridge eliminates that chaos by connecting verified donors, patients, hospitals, and administrators on a single platform — instantly.
+When a patient needs blood urgently, family members often spend precious hours making phone calls, visiting blood banks, and hoping for the best. BloodBridge eliminates that chaos by connecting verified donors, patients, hospitals, and administrators on a single platform - instantly.
 
 ---
 
@@ -39,7 +39,7 @@ A person who is willing to donate blood in emergencies.
 ### 🙋 Patient / Requester
 A patient's family member or caregiver who needs blood urgently.
 - Posts a blood request with the patient's details, required blood type, hospital, and urgency level
-- Instantly sees a ranked list of compatible donors nearby — sorted by reliability
+- Instantly sees a ranked list of compatible donors nearby - sorted by reliability
 - Confirms the donor of their choice
 - Can see the donor's phone number only after confirming them (privacy protection)
 - Marks the request as fulfilled when the donation is complete
@@ -48,7 +48,7 @@ A patient's family member or caregiver who needs blood urgently.
 ### 🏥 Hospital
 A registered hospital account with elevated responsibilities.
 - Everything a Requester can do, plus:
-- Can trigger a **🚨 SOS Alert** — broadcasts an emergency notification to every eligible donor in the city simultaneously via the app
+- Can trigger a **🚨 SOS Alert** - broadcasts an emergency notification to every eligible donor in the city simultaneously via the app
 
 ### 🔴 Admin
 The platform manager with full oversight.
@@ -63,10 +63,10 @@ The platform manager with full oversight.
 ## Key Features
 
 ### ⚡ Real-Time Notifications
-The moment a blood request is posted, every compatible donor in that city receives an in-app notification and a live alert — no refresh needed. This is powered by real-time socket technology.
+The moment a blood request is posted, every compatible donor in that city receives an in-app notification and a live alert - no refresh needed. This is powered by real-time socket technology.
 
 ### 🏆 Donor Reliability Score (DRS)
-Every donor has a score from 0 to 100 that reflects their reliability. It goes up when they respond quickly, show up, and complete donations. It goes down when they accept a request and cancel, or don't show up. Requesters can see this score when choosing a donor — so the most trustworthy donors rise to the top.
+Every donor has a score from 0 to 100 that reflects their reliability. It goes up when they respond quickly, show up, and complete donations. It goes down when they accept a request and cancel, or don't show up. Requesters can see this score when choosing a donor - so the most trustworthy donors rise to the top.
 
 **DRS Badges:**
 | Score | Badge |
@@ -84,7 +84,7 @@ Donors earn special badges as they reach donation milestones:
 - 25 donations → **Legend 🌟**
 
 ### 🚨 SOS Alert System
-Hospitals and admins can trigger a city-wide SOS alert for critical emergencies. Every eligible donor in the city gets an emergency broadcast simultaneously — not just compatible ones, but all available verified donors.
+Hospitals and admins can trigger a city-wide SOS alert for critical emergencies. Every eligible donor in the city gets an emergency broadcast simultaneously - not just compatible ones, but all available verified donors.
 
 ### ⏱️ Smart Cooldown System
 After every donation, a donor is automatically placed on a 90-day cooldown (the medically safe waiting period). The system lifts the cooldown automatically when the time is up and notifies the donor.
@@ -98,13 +98,13 @@ If no coordinator steps up within a set time window (based on urgency), the syst
 - **Planned requests** → 60-minute fallback
 
 ### 🗺️ Live Map
-An interactive map shows anonymous donor pins and blood bank locations filterable by blood type and city — so patients and hospitals can visually find help nearby.
+An interactive map shows anonymous donor pins and blood bank locations filterable by blood type and city - so patients and hospitals can visually find help nearby.
 
 ### 🏦 Blood Bank Directory
-A searchable directory of all blood banks with real-time inventory levels per blood type, city, address, and phone number — managed by the admin.
+A searchable directory of all blood banks with real-time inventory levels per blood type, city, address, and phone number - managed by the admin.
 
 ### 🌐 Multilingual Support
-The platform supports **English, Hindi (हिंदी), and Telugu (తెలుగు)** — because emergencies happen across all communities.
+The platform supports **English, Hindi (हिंदी), and Telugu (తెలుగు)** - because emergencies happen across all communities.
 
 ### 🔒 Privacy Protection
 A donor's phone number is **never shown** to the requester until the requester has confirmed that specific donor. This prevents spam and protects donor privacy.

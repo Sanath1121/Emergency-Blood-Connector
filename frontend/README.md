@@ -1,4 +1,4 @@
-# BloodBridge — Frontend (Client)
+# BloodBridge - Frontend (Client)
 
 React.js application built with Vite. Provides role-based dashboards, real-time notifications, an interactive map, and multilingual support.
 
@@ -194,7 +194,7 @@ On submit → real-time notifications sent to compatible donors in city.
 #### `hospital/HospitalDashboard.jsx`
 - Post blood requests (same as requester)
 - View all hospital's active requests
-- **🚨 SOS Alert** button — broadcasts emergency to all eligible city donors simultaneously
+- **🚨 SOS Alert** button - broadcasts emergency to all eligible city donors simultaneously
 - Blood bank inventory reference panel
 
 ---
@@ -314,7 +314,7 @@ Axios instance configured with:
 Built with `i18next` + `react-i18next`.
 
 **Supported languages:**
-- 🇬🇧 English (`en`) — default
+- 🇬🇧 English (`en`) - default
 - 🇮🇳 Hindi (`hi`)
 - 🇮🇳 Telugu (`te`)
 
