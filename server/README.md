@@ -16,25 +16,6 @@ node seed.js       # populate sample data
 
 ---
 
-## Environment Variables
-
-Create a `.env` file in the `server/` directory:
-
-```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/bloodbridge
-JWT_SECRET=bloodbridge_jwt_secret_key_2024
-CLIENT_URL=http://localhost:5173
-```
-
-For production (MongoDB Atlas):
-```env
-MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/bloodbridge
-CLIENT_URL=https://your-app.vercel.app
-```
-
----
-
 ## Folder Structure
 
 ```
@@ -348,17 +329,6 @@ Stored in `user.badges[]`. Notification fires when milestone is reached.
 
 ---
 
-## Seeder
-
-`node seed.js` — clears and repopulates the database with:
-- 1 Admin (`admin@bloodbridge.com` / `Admin@123`)
-- 5 Donors across Mumbai, Delhi, Bangalore
-- 3 Requesters (2 individual + 1 hospital)
-- 2 Blood Banks (Mumbai, Delhi)
-- 3 Open Blood Requests
-
----
-
 ## Deployment (Render)
 
 1. Create a **Web Service** on [render.com](https://render.com)
@@ -368,8 +338,6 @@ Stored in `user.badges[]`. Notification fires when milestone is reached.
 5. Start command: `npm start`
 6. Add environment variables (PORT, MONGO_URI, JWT_SECRET, CLIENT_URL)
 7. Deploy — Render provides a stable HTTPS URL
-
-> **Note:** Render free tier has a ~50 second cold start after inactivity. Socket.io WebSockets are fully supported.
 
 ---
 

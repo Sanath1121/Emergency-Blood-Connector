@@ -358,11 +358,7 @@ Displays a colour-coded badge based on DRS score:
 1. Push your repo to GitHub
 2. Go to [vercel.com](https://vercel.com) → New Project → import repo
 3. Set **Root Directory** to `frontend/`
-4. Add environment variables:
-   ```
-   VITE_API_URL=https://your-backend.onrender.com/api
-   VITE_SOCKET_URL=https://your-backend.onrender.com
-   ```
+4. Add environment variables.
 5. Deploy → Vercel provides a stable HTTPS URL
 6. Every `git push` to your main branch triggers an automatic redeploy at the same URL
 

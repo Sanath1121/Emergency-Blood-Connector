@@ -131,18 +131,6 @@ A donor's phone number is **never shown** to the requester until the requester h
 
 ---
 
-## Sample Login Credentials (after seeding)
-
-| Role | Email | Password |
-|---|---|---|
-| Admin | admin@bloodbridge.com | Admin@123 |
-| Donor (Mumbai) | rahul@donor.com | Password@123 |
-| Donor (Delhi) | priya@donor.com | Password@123 |
-| Requester | sunita@requester.com | Password@123 |
-| Hospital | hospital@bloodbridge.com | Password@123 |
-
----
-
 ## Tech Stack
 
 | Layer | Technology |
@@ -159,4 +147,3 @@ A donor's phone number is **never shown** to the requester until the requester h
 
 ---
 
-*BloodBridge — Built for emergencies. Designed for trust.*
