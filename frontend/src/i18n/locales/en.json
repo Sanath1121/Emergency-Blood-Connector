@@ -1,0 +1,62 @@
+{
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "requests": "Requests",
+    "bloodBanks": "Blood Banks",
+    "map": "Live Map",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email Address",
+    "password": "Password",
+    "role": "Select Role",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "noAccount": "Don't have an account? Register",
+    "hasAccount": "Already have an account? Login",
+    "name": "Full Name",
+    "city": "City",
+    "phone": "Phone Number",
+    "bloodType": "Blood Type"
+  },
+  "request": {
+    "post": "Post Blood Request",
+    "urgency": "Urgency Level",
+    "critical": "Critical (SOS)",
+    "moderate": "Moderate",
+    "planned": "Planned",
+    "bloodType": "Blood Type Required",
+    "hospital": "Hospital Name",
+    "city": "City",
+    "units": "Units Required",
+    "patientName": "Patient Name"
+  },
+  "donor": {
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "onCooldown": "On Cooldown",
+    "drsScore": "DRS Score",
+    "donate": "Donate Now",
+    "accept": "Accept Request",
+    "reliability": "Reliability"
+  },
+  "drs": {
+    "trustedLifesaver": "Trusted Lifesaver",
+    "reliableDonor": "Reliable Donor",
+    "activeDonor": "Active Donor",
+    "needsImprovement": "Needs Improvement"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "city": "City",
+    "submit": "Submit"
+  }
+}

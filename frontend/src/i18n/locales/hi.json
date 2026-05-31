@@ -1,0 +1,62 @@
+{
+  "nav": {
+    "home": "होम",
+    "dashboard": "डैशबोर्ड",
+    "requests": "अनुरोध",
+    "bloodBanks": "ब्लड बैंक",
+    "map": "लाइव मैप",
+    "logout": "लॉगआउट"
+  },
+  "auth": {
+    "login": "लॉगिन",
+    "register": "रजिस्टर",
+    "email": "ईमेल पता",
+    "password": "पासवर्ड",
+    "role": "भूमिका चुनें",
+    "signIn": "साइन इन करें",
+    "signUp": "साइन अप करें",
+    "noAccount": "खाता नहीं है? रजिस्टर करें",
+    "hasAccount": "पहले से खाता है? लॉगिन करें",
+    "name": "पूरा नाम",
+    "city": "शहर",
+    "phone": "फ़ोन नंबर",
+    "bloodType": "रक्त समूह"
+  },
+  "request": {
+    "post": "रक्त अनुरोध पोस्ट करें",
+    "urgency": "आपातकालीन स्तर",
+    "critical": "गंभीर (SOS)",
+    "moderate": "मध्यम",
+    "planned": "नियोजित",
+    "bloodType": "आवश्यक रक्त समूह",
+    "hospital": "अस्पताल का नाम",
+    "city": "शहर",
+    "units": "आवश्यक यूनिट",
+    "patientName": "मरीज का नाम"
+  },
+  "donor": {
+    "available": "उपलब्ध",
+    "unavailable": "अनुपलब्ध",
+    "onCooldown": "कूलडाउन पर",
+    "drsScore": "DRS स्कोर",
+    "donate": "अभी दान करें",
+    "accept": "अनुरोध स्वीकारें",
+    "reliability": "विश्वसनीयता"
+  },
+  "drs": {
+    "trustedLifesaver": "विश्वसनीय जीवन रक्षक",
+    "reliableDonor": "भरोसेमंद दाता",
+    "activeDonor": "सक्रिय दाता",
+    "needsImprovement": "सुधार की आवश्यकता है"
+  },
+  "common": {
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "confirm": "पुष्टि करें",
+    "search": "खोजें",
+    "filter": "फ़िल्टर",
+    "loading": "लोड हो रहा है...",
+    "city": "शहर",
+    "submit": "जमा करें"
+  }
+}

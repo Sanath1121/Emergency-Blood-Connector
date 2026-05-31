@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --color-primary: #C0392B;
+  --color-primary-light: #E74C3C;
+  --color-secondary: #2C3E50;
+  --color-surface: #FFFFFF;
+  --color-background: #F8F9FA;
+  --color-muted: #6C757D;
+  --color-success: #27AE60;
+  --color-warning: #F39C12;
+  --color-danger: #C0392B;
+  --color-border-custom: #E9ECEF;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-secondary);
+}
+
+/* Custom scrollbars for dashboard feel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Leaflet Map sizing */
+.leaflet-container {
+  width: 100%;
+  height: 500px;
+  border-radius: 12px;
+  z-index: 1;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
