@@ -39,14 +39,14 @@ const PostRequest = () => {
       const res = await api.post('/requests', formData);
       if (res.data.success) {
         addToast(
-          '🩸 Request Created',
-          `Blood request for patient ${formData.patientName} created successfully! Notifications sent to compatible donors.`,
+          t('requester.requestCreatedTitle'),
+          t('requester.requestCreatedMessage', { patientName: formData.patientName }),
           'general'
         );
         navigate('/dashboard');
       }
     } catch (error) {
-      addToast('❌ Request Failed', error.response?.data?.message || 'Failed to create request', 'sos_alert');
+      addToast(t('requester.requestFailed'), error.response?.data?.message || t('requester.requestFailed', 'Failed to create request'), 'sos_alert');
     }
     setLoading(false);
   };
@@ -63,7 +63,7 @@ const PostRequest = () => {
             <div className="flex items-center gap-3 border-b border-border pb-4 mb-6">
               <LuPlus className="text-primary text-2xl" />
               <h2 className="text-xl font-bold text-secondary">
-                {t('request.post', 'Post Blood Request')}
+                {t('requester.postTitle')}
               </h2>
             </div>
 
@@ -71,7 +71,7 @@ const PostRequest = () => {
               {/* Patient Name */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-secondary uppercase tracking-wider">
-                  Patient Name
+                  {t('requester.patientName')}
                 </label>
                 <div className="relative flex items-center">
                   <LuUser className="absolute left-4 text-gray-400" />
@@ -81,7 +81,7 @@ const PostRequest = () => {
                     name="patientName"
                     value={formData.patientName}
                     onChange={handleChange}
-                    placeholder="Ramesh Roy"
+                    placeholder={t('requester.patientPlaceholder', 'Ramesh Roy')}
                     className="w-full bg-gray-50 border border-border focus:border-primary focus:bg-white rounded-xl pl-11 pr-4 py-2.5 text-sm font-semibold outline-none transition-all"
                   />
                 </div>
@@ -109,7 +109,7 @@ const PostRequest = () => {
 
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-secondary uppercase tracking-wider">
-                    Units Required
+                    {t('requester.unitsRequired')}
                   </label>
                   <input
                     type="number"
@@ -126,7 +126,7 @@ const PostRequest = () => {
               {/* Hospital Name */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-secondary uppercase tracking-wider">
-                  Hospital Name
+                  {t('requester.hospitalName')}
                 </label>
                 <div className="relative flex items-center">
                   <LuHospital className="absolute left-4 text-gray-400" />
@@ -136,7 +136,7 @@ const PostRequest = () => {
                     name="hospitalName"
                     value={formData.hospitalName}
                     onChange={handleChange}
-                    placeholder="Lilavati Hospital"
+                    placeholder={t('requester.hospitalPlaceholder', 'Lilavati Hospital')}
                     className="w-full bg-gray-50 border border-border focus:border-primary focus:bg-white rounded-xl pl-11 pr-4 py-2.5 text-sm font-semibold outline-none transition-all"
                   />
                 </div>
@@ -156,7 +156,7 @@ const PostRequest = () => {
                       name="city"
                       value={formData.city}
                       onChange={handleChange}
-                      placeholder="Mumbai"
+                      placeholder={t('auth.cityPlaceholder', 'Mumbai')}
                       className="w-full bg-gray-50 border border-border focus:border-primary focus:bg-white rounded-xl pl-11 pr-4 py-2.5 text-sm font-semibold outline-none transition-all"
                     />
                   </div>
@@ -172,9 +172,9 @@ const PostRequest = () => {
                     onChange={handleChange}
                     className="w-full bg-gray-50 border border-border focus:border-primary focus:bg-white rounded-xl px-4 py-2.5 text-sm font-bold outline-none transition-all"
                   >
-                    <option value="critical">Critical (Emergency SOS 🚨)</option>
-                    <option value="moderate">Moderate</option>
-                    <option value="planned">Planned / Scheduled</option>
+                    <option value="critical">{t('requester.urgencyCritical')}</option>
+                    <option value="moderate">{t('requester.urgencyModerate')}</option>
+                    <option value="planned">{t('requester.urgencyPlanned')}</option>
                   </select>
                 </div>
               </div>
@@ -185,7 +185,7 @@ const PostRequest = () => {
                 className="w-full bg-primary hover:bg-primary-light disabled:bg-gray-400 text-white font-bold uppercase tracking-wider text-xs py-4 rounded-xl shadow-lg shadow-red-500/10 transition-all mt-4 transform active:scale-[0.98] flex items-center justify-center gap-2"
               >
                 <LuHeartPulse className="text-base" />
-                {loading ? 'Creating Request...' : 'Publish Emergency Request'}
+                {loading ? t('requester.creating') : t('requester.publish')}
               </button>
             </form>
           </div>

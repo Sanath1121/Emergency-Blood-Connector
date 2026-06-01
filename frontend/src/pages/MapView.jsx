@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import Navbar from '../components/common/Navbar';
@@ -46,6 +47,7 @@ const cityCoordinates = {
 };
 
 const MapView = () => {
+  const { t } = useTranslation();
   const [donors, setDonors] = useState([]);
   const [banks, setBanks] = useState([]);
   const [bloodFilter, setBloodFilter] = useState('');
@@ -97,23 +99,23 @@ const MapView = () => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-4">
             <div>
               <h2 className="text-xl font-bold text-secondary flex items-center gap-2">
-                <LuMap className="text-primary animate-pulse" /> Live Emergency Blood Map
+                <LuMap className="text-primary animate-pulse" /> {t('map.title')}
               </h2>
               <p className="text-xs text-gray-500 mt-1">
-                Pin distribution mapping. Verified donors coordinates are masked anonymously.
+                {t('map.subtitle')}
               </p>
             </div>
 
             {/* Blood type compatibility filter */}
             <div className="flex items-center gap-2 bg-white border border-border px-3 py-1.5 rounded-xl shadow-sm self-start sm:self-center">
               <LuFilter className="text-gray-400 text-xs" />
-              <span className="text-[10px] font-bold text-gray-400 uppercase">Group:</span>
+              <span className="text-[10px] font-bold text-gray-400 uppercase">{t('map.group')}</span>
               <select
                 value={bloodFilter}
                 onChange={(e) => setBloodFilter(e.target.value)}
                 className="bg-transparent text-xs font-bold text-secondary outline-none cursor-pointer"
               >
-                <option value="">All Groups</option>
+                <option value="">{t('map.allGroups')}</option>
                 {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map((type) => (
                   <option key={type} value={type}>
                     {type}
@@ -125,7 +127,7 @@ const MapView = () => {
 
           {loading ? (
             <div className="p-8 text-center text-xs text-muted">
-              Loading geospatial mapping indices...
+              {t('map.loading')}
             </div>
           ) : (
             <div className="bg-white p-4 rounded-2xl border border-border shadow-sm overflow-hidden relative">
@@ -133,11 +135,11 @@ const MapView = () => {
               <div className="absolute top-6 right-6 z-10 bg-white/95 backdrop-blur-sm border border-border p-3 rounded-xl shadow-lg flex flex-col gap-2 text-[10px] font-bold uppercase tracking-wider text-gray-500">
                 <div className="flex items-center gap-2">
                   <span className="h-3.5 w-3.5 bg-red-500 rounded border border-red-400 inline-block shadow-sm"></span>
-                  <span>🔴 Anonymous Donor Pin</span>
+                  <span>🔴 {t('map.anonPin')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="h-3.5 w-3.5 bg-blue-500 rounded border border-blue-400 inline-block shadow-sm"></span>
-                  <span>🔵 Blood Bank Pin</span>
+                  <span>🔵 {t('map.bankPin')}</span>
                 </div>
               </div>
 
@@ -161,10 +163,10 @@ const MapView = () => {
                   >
                     <Popup>
                       <div className="p-1 flex flex-col text-xs font-semibold gap-1 min-w-32">
-                        <h4 className="font-extrabold text-primary text-sm uppercase">Verified Donor 🩸</h4>
-                        <span className="text-secondary mt-1">Group: <strong className="font-bold">{donor.bloodType}</strong></span>
-                        <span className="text-gray-500">Jurisdiction: <strong className="capitalize">{donor.city}</strong></span>
-                        <span className="text-[10px] text-gray-400 font-bold uppercase mt-1">DRS: {donor.drsScore} (Badge: gold)</span>
+                        <h4 className="font-extrabold text-primary text-sm uppercase">{t('map.verifiedDonor')}</h4>
+                        <span className="text-secondary mt-1">{t('map.donorGroup')} <strong className="font-bold">{donor.bloodType}</strong></span>
+                        <span className="text-gray-500">{t('map.jurisdiction')} <strong className="capitalize">{donor.city}</strong></span>
+                        <span className="text-[10px] text-gray-400 font-bold uppercase mt-1">{t('admin.drs')}: {donor.drsScore} (Badge: gold)</span>
                       </div>
                     </Popup>
                   </Marker>
@@ -186,7 +188,7 @@ const MapView = () => {
                           {bank.phone && <span className="text-gray-500">📞 {bank.phone}</span>}
                           
                           <div className="border-t border-border pt-1.5 mt-1">
-                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Stock Availability</span>
+                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mb-1">{t('map.stockAvailability')}</span>
                             <div className="grid grid-cols-4 gap-1">
                               {Object.entries(bank.availability).map(([type, units]) => (
                                 <span

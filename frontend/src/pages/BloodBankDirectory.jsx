@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Navbar from '../components/common/Navbar';
 import Sidebar from '../components/common/Sidebar';
 import api from '../services/api';
 import { LuSearch, LuHeart, LuPhone, LuMapPin } from 'react-icons/lu';
 
 const BloodBankDirectory = () => {
+  const { t } = useTranslation();
   const [banks, setBanks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [cityFilter, setCityFilter] = useState('');
@@ -35,10 +37,10 @@ const BloodBankDirectory = () => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-4">
             <div>
               <h2 className="text-xl font-bold text-secondary flex items-center gap-2">
-                <LuHeart className="text-primary animate-pulse" /> Blood Banks Directory Index
+                <LuHeart className="text-primary animate-pulse" /> {t('directory.title')}
               </h2>
               <p className="text-xs text-gray-500 mt-1">
-                Search and explore public blood stock volumes.
+                {t('directory.subtitle')}
               </p>
             </div>
 
@@ -47,7 +49,7 @@ const BloodBankDirectory = () => {
               <LuSearch className="absolute left-3.5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search by city (e.g. Mumbai)"
+                placeholder={t('directory.searchPlaceholder')}
                 value={cityFilter}
                 onChange={(e) => setCityFilter(e.target.value)}
                 className="w-full bg-white border border-border rounded-xl pl-10 pr-3 py-2 text-xs font-semibold outline-none focus:border-primary shadow-sm"
@@ -57,12 +59,12 @@ const BloodBankDirectory = () => {
 
           {loading ? (
             <div className="p-8 text-center text-xs text-muted">
-              Loading inventory directory index...
+              {t('directory.loading')}
             </div>
           ) : banks.length === 0 ? (
             <div className="p-8 text-center text-xs text-muted bg-white border border-border rounded-2xl shadow-sm min-h-60 flex flex-col items-center justify-center">
               <span>📋</span>
-              <p className="mt-1">No blood banks indexed matching this query</p>
+              <p className="mt-1">{t('directory.empty')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -90,7 +92,7 @@ const BloodBankDirectory = () => {
                   {/* Stock inventory values */}
                   <div className="border-t border-border pt-3">
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2">
-                      Available Stock Inventories
+                      {t('directory.availableStock')}
                     </span>
                     <div className="grid grid-cols-4 gap-2">
                       {Object.entries(bank.availability).map(([type, units]) => (

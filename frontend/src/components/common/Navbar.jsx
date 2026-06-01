@@ -61,7 +61,7 @@ const Navbar = () => {
         {user && (
           <>
             {/* Notification Bell Dropdown */}
-            <div className="relative">
+            <div id="guide-notification-bell" className="relative">
               <button
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="p-2 text-gray-600 hover:text-primary hover:bg-red-50 rounded-full relative transition-all"

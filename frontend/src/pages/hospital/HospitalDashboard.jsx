@@ -6,12 +6,14 @@ import { NotificationContext } from '../../context/NotificationContext';
 import Navbar from '../../components/common/Navbar';
 import Sidebar from '../../components/common/Sidebar';
 import api from '../../services/api';
+import useGuide from '../../hooks/useGuide';
 import { LuHospital, LuActivity, LuFlame, LuPlus, LuShieldAlert, LuDatabase } from 'react-icons/lu';
 
 const HospitalDashboard = () => {
   const { t } = useTranslation();
   const { user } = useContext(AuthContext);
   const { addToast } = useContext(NotificationContext);
+  const { autoStart } = useGuide('hospital');
 
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -43,6 +45,10 @@ const HospitalDashboard = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    autoStart();
+  }, []);
+
   const handleSOS = async (requestId) => {
     try {
       const res = await api.post(`/requests/${requestId}/sos`);
@@ -66,7 +72,7 @@ const HospitalDashboard = () => {
         <Sidebar />
         <main className="flex-1 p-6 max-w-6xl mx-auto flex flex-col gap-6">
           {/* Header */}
-          <div className="bg-white p-6 rounded-2xl border border-border shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div id="guide-welcome" className="bg-white p-6 rounded-2xl border border-border shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="h-12 w-12 bg-red-50 text-primary border border-red-100 flex items-center justify-center rounded-2xl text-xl shadow-sm">
                 <LuHospital />
@@ -92,7 +98,7 @@ const HospitalDashboard = () => {
           {/* Quick Info Grid: SOS info & inventory check */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* SOS Broadcast Instructions */}
-            <div className="bg-gradient-to-br from-red-50 to-white p-6 rounded-2xl border border-red-100 shadow-sm lg:col-span-1 flex flex-col justify-between">
+            <div id="guide-sos" className="bg-gradient-to-br from-red-50 to-white p-6 rounded-2xl border border-red-100 shadow-sm lg:col-span-1 flex flex-col justify-between">
               <div>
                 <span className="text-2xl">🚨</span>
                 <h3 className="font-extrabold text-red-950 text-sm mt-3 flex items-center gap-1.5">

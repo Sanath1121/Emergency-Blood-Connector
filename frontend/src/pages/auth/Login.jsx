@@ -56,17 +56,17 @@ const Login = () => {
         }
       });
     } else {
-      setError(res.message || 'Google sign-in failed');
+      setError(res.message || t('auth.googleSignInFailed', 'Google sign-in failed'));
     }
   };
 
   const handleGoogleButtonClick = () => {
     if (!GOOGLE_CLIENT_ID) {
-      setError('Google Sign-In is not configured. Please add your VITE_GOOGLE_CLIENT_ID.');
+      setError(t('auth.googleNotConfigured', 'Google Sign-In is not configured. Please add your VITE_GOOGLE_CLIENT_ID.'));
       return;
     }
     if (!window.google) {
-      setError('Google Identity Services failed to load. Please refresh the page.');
+      setError(t('auth.googleLoadFailed', 'Google Identity Services failed to load. Please refresh the page.'));
       return;
     }
     // Trigger Google's sign-in popup
@@ -97,7 +97,7 @@ const Login = () => {
     if (res.success) {
       navigate('/dashboard');
     } else {
-      setError(res.message || 'Login failed');
+      setError(res.message || t('auth.loginFailed', 'Login failed'));
     }
   };
 
@@ -109,12 +109,8 @@ const Login = () => {
 
         <div className="flex flex-col items-center text-center mb-8">
           <span className="text-4xl mb-3 animate-pulse">🩸</span>
-          <h2 className="text-2xl font-bold text-secondary">
-            {t('auth.login', 'Login')} to BloodBridge
-          </h2>
-          <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mt-1">
-            Realtime Emergency Connector
-          </p>
+          <h2 className="text-2xl font-bold text-secondary">{t('auth.loginTitle')}</h2>
+          <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mt-1">{t('auth.loginSubtitle')}</p>
         </div>
 
         {error && (
@@ -143,13 +139,13 @@ const Login = () => {
               <path fill="#34A853" d="M24 48c6 0 11-2 14.7-5.3l-7.5-5.8c-2 1.3-4.6 2.1-7.2 2.1-6.2 0-11.5-3.6-13.3-9.3l-8 6.1C6.8 42.6 14.8 48 24 48z"/>
             </svg>
           )}
-          {googleLoading ? 'Signing in with Google...' : 'Continue with Google'}
+              {googleLoading ? t('auth.googleSigningIn') : t('auth.googleContinue')}
         </button>
 
         {/* ── Divider ── */}
         <div className="flex items-center gap-3 mb-5">
           <div className="flex-1 h-px bg-gray-100"></div>
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Or sign in with email</span>
+          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{t('auth.orSignInWithEmail')}</span>
           <div className="flex-1 h-px bg-gray-100"></div>
         </div>
 
@@ -166,7 +162,7 @@ const Login = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder={t('auth.emailPlaceholder')}
                 className="w-full bg-gray-50 border border-border focus:border-primary focus:bg-white rounded-xl pl-11 pr-4 py-3 text-sm font-medium outline-none transition-all"
               />
             </div>
@@ -183,7 +179,7 @@ const Login = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder={t('auth.passwordPlaceholder')}
                 className="w-full bg-gray-50 border border-border focus:border-primary focus:bg-white rounded-xl pl-11 pr-4 py-3 text-sm font-medium outline-none transition-all"
               />
             </div>

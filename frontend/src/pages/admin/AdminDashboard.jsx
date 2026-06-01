@@ -1,12 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Navbar from '../../components/common/Navbar';
 import Sidebar from '../../components/common/Sidebar';
 import api from '../../services/api';
+import useGuide from '../../hooks/useGuide';
 import { LuUsers, LuHeartPulse, LuFlame, LuTrophy, LuActivity, LuUserCheck } from 'react-icons/lu';
 
 const AdminDashboard = () => {
+  const { t } = useTranslation();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { autoStart } = useGuide('admin');
 
   const fetchStats = async () => {
     setLoading(true);
@@ -25,31 +29,35 @@ const AdminDashboard = () => {
     fetchStats();
   }, []);
 
+  useEffect(() => {
+    autoStart();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="flex">
         <Sidebar />
         <main className="flex-1 p-6 max-w-6xl mx-auto flex flex-col gap-6">
-          <h2 className="text-xl font-bold text-secondary flex items-center gap-2">
-            ⚙️ Platform Administrator Dashboard
+          <h2 id="guide-welcome" className="text-xl font-bold text-secondary flex items-center gap-2">
+            ⚙️ {t('admin.dashboardTitle')}
           </h2>
 
           {loading ? (
             <div className="p-8 text-center text-xs text-muted">
-              Loading platform analytics...
+              {t('admin.loading')}
             </div>
           ) : (
             <div className="flex flex-col gap-6">
               {/* Aggregates Card Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div id="guide-stats" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="p-5 rounded-2xl bg-white border border-border shadow-sm flex items-center gap-4">
                   <div className="h-10 w-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center text-lg border border-blue-100">
                     <LuUsers />
                   </div>
                   <div>
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                      Total Registered Users
+                      {t('admin.totalUsers')}
                     </span>
                     <h3 className="text-xl font-extrabold text-secondary mt-0.5">
                       {stats?.totalUsers || 0}
@@ -63,7 +71,7 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                      Active Requests (Open)
+                      {t('admin.activeRequests')}
                     </span>
                     <h3 className="text-xl font-extrabold text-secondary mt-0.5">
                       {stats?.activeRequests || 0}
@@ -77,7 +85,7 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                      Verified Life Donors
+                      {t('admin.verifiedDonors')}
                     </span>
                     <h3 className="text-xl font-extrabold text-secondary mt-0.5">
                       {stats?.verifiedDonors || 0} / {stats?.totalDonors || 0}
@@ -91,7 +99,7 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                      Fulfilled Requests
+                      {t('admin.fulfilledRequests')}
                     </span>
                     <h3 className="text-xl font-extrabold text-secondary mt-0.5">
                       {stats?.fulfilledRequests || 0}
@@ -107,13 +115,13 @@ const AdminDashboard = () => {
                   <div className="flex items-center gap-2 border-b border-border pb-4 mb-4">
                     <LuTrophy className="text-primary text-xl" />
                     <h3 className="font-bold text-secondary text-xs uppercase tracking-wider">
-                      Elite Donors Leaderboard (Platform-wide)
+                      {t('admin.eliteDonors')}
                     </h3>
                   </div>
 
                   <div className="flex flex-col gap-2.5">
                     {stats?.topDonors?.length === 0 ? (
-                      <div className="text-xs text-muted text-center py-6">No donors registered yet</div>
+                      <div className="text-xs text-muted text-center py-6">{t('admin.noDonors')}</div>
                     ) : (
                       stats?.topDonors?.map((donor, idx) => (
                         <div
@@ -130,12 +138,12 @@ const AdminDashboard = () => {
                                 {donor.name} ({donor.bloodType})
                               </span>
                               <span className="text-[9px] text-gray-400 font-bold uppercase block mt-0.5">
-                                Location: {donor.city} • DRS Score: {donor.drsScore}
+                                {t('common.city')}: {donor.city} • {t('admin.drs')}: {donor.drsScore}
                               </span>
                             </div>
                           </div>
                           <span className="text-xs font-extrabold text-primary">
-                            {donor.totalDonations} Donations Saved
+                            {donor.totalDonations} {t('requester.donationsSaved')}
                           </span>
                         </div>
                       ))
@@ -148,19 +156,19 @@ const AdminDashboard = () => {
                   <div className="flex items-center gap-2 border-b border-border pb-4 mb-4">
                     <LuActivity className="text-primary text-xl" />
                     <h3 className="font-bold text-secondary text-xs uppercase tracking-wider">
-                      Top Cities by Platform Requests
+                      {t('admin.topCities')}
                     </h3>
                   </div>
 
                   <div className="flex flex-col gap-4 justify-center">
                     {stats?.cityStats?.length === 0 ? (
-                      <div className="text-xs text-muted text-center py-6">No requests recorded yet</div>
+                      <div className="text-xs text-muted text-center py-6">{t('admin.noRequests')}</div>
                     ) : (
                       stats?.cityStats?.map((city, idx) => (
                         <div key={idx} className="flex flex-col gap-1.5 text-xs font-bold">
                           <div className="flex justify-between items-center">
                             <span className="text-secondary capitalize">{city._id}</span>
-                            <span className="text-primary">{city.count} Requests</span>
+                            <span className="text-primary">{city.count} {t('admin.activeRequests')}</span>
                           </div>
                           {/* Beautiful CSS bar */}
                           <div className="w-full bg-gray-100 rounded-full h-2">

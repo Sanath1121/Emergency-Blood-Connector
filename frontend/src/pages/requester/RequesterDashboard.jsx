@@ -6,6 +6,7 @@ import { NotificationContext } from '../../context/NotificationContext';
 import Navbar from '../../components/common/Navbar';
 import Sidebar from '../../components/common/Sidebar';
 import api from '../../services/api';
+import useGuide from '../../hooks/useGuide';
 import { LuPlus, LuActivity, LuCheck, LuUsers, LuFlame } from 'react-icons/lu';
 
 const RequesterDashboard = () => {
@@ -13,6 +14,7 @@ const RequesterDashboard = () => {
   const { user } = useContext(AuthContext);
   const { addToast } = useContext(NotificationContext);
   const navigate = useNavigate();
+  const { autoStart } = useGuide('requester');
 
   const [myRequests, setMyRequests] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,6 +37,10 @@ const RequesterDashboard = () => {
       fetchMyRequests();
     }
   }, [user]);
+
+  useEffect(() => {
+    autoStart();
+  }, []);
 
   const handleFulfill = async (requestId) => {
     try {
@@ -104,13 +110,14 @@ const RequesterDashboard = () => {
         <Sidebar />
         <main className="flex-1 p-6 max-w-6xl mx-auto flex flex-col gap-6">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-4">
+          <div id="guide-welcome" className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-4">
             <div>
               <h2 className="text-xl font-bold text-secondary flex items-center gap-2">🏠 {t('request.dashboardTitle')}</h2>
               <p className="text-xs text-gray-500 mt-1">{t('request.dashboardSubtitle')}</p>
             </div>
             <Link
               to="/requests/post"
+              id="guide-nav-post"
               className="bg-primary hover:bg-primary-light text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2"
             >
               <LuPlus />
@@ -129,7 +136,7 @@ const RequesterDashboard = () => {
               <p className="text-xs text-gray-400 max-w-xs mt-1 leading-relaxed">{t('request.noRequestsDescription')}</p>
             </div>
           ) : (
-            <div className="flex flex-col gap-6">
+            <div id="guide-active-requests" className="flex flex-col gap-6">
               {myRequests.map((req) => (
                 <div
                   key={req._id}

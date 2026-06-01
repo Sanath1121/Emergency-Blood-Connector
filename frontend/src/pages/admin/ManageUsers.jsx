@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NotificationContext } from '../../context/NotificationContext';
 import Navbar from '../../components/common/Navbar';
 import Sidebar from '../../components/common/Sidebar';
@@ -6,6 +7,7 @@ import api from '../../services/api';
 import { LuUsers, LuCheck, LuSlash } from 'react-icons/lu';
 
 const ManageUsers = () => {
+  const { t } = useTranslation();
   const { addToast } = useContext(NotificationContext);
 
   const [users, setUsers] = useState([]);
@@ -37,11 +39,11 @@ const ManageUsers = () => {
     try {
       const res = await api.put(`/admin/users/${userId}/verify`);
       if (res.data.success) {
-        addToast('✅ Donor Verified', 'The donor account has been verified successfully.', 'general');
+        addToast(t('admin.verify'), t('admin.bloodBankUpdated', 'The donor account has been verified successfully.'), 'general');
         fetchUsers();
       }
     } catch (error) {
-      addToast('❌ Action Failed', error.response?.data?.message || 'Verification failed', 'sos_alert');
+      addToast(t('common.errorRetry'), error.response?.data?.message || t('admin.verifyFailed', 'Verification failed'), 'sos_alert');
     }
   };
 
@@ -49,15 +51,11 @@ const ManageUsers = () => {
     try {
       const res = await api.put(`/admin/users/${userId}/suspend`);
       if (res.data.success) {
-        addToast(
-          '⚙️ Status Updated',
-          'Account status has been successfully updated.',
-          'general'
-        );
+        addToast(t('admin.activate'), t('admin.statusUpdated', 'Account status has been successfully updated.'), 'general');
         fetchUsers();
       }
     } catch (error) {
-      addToast('❌ Action Failed', error.response?.data?.message || 'Suspension failed', 'sos_alert');
+      addToast(t('common.errorRetry'), error.response?.data?.message || t('admin.suspendFailed', 'Suspension failed'), 'sos_alert');
     }
   };
 
@@ -71,10 +69,10 @@ const ManageUsers = () => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-4">
             <div>
               <h2 className="text-xl font-bold text-secondary flex items-center gap-2">
-                <LuUsers /> Manage Platform Users
+                <LuUsers /> {t('admin.manageUsersTitle')}
               </h2>
               <p className="text-xs text-gray-500 mt-1">
-                Audit accounts, toggle suspension filters, and verify blood donor credentials.
+                {t('admin.manageUsersSubtitle')}
               </p>
             </div>
           </div>
@@ -88,16 +86,16 @@ const ManageUsers = () => {
                 onChange={(e) => setRoleFilter(e.target.value)}
                 className="bg-gray-50 border border-border px-3 py-2 text-xs font-semibold rounded-xl outline-none"
               >
-                <option value="">All Roles</option>
-                <option value="donor">Donors</option>
-                <option value="requester">Requesters</option>
-                <option value="hospital">Hospitals</option>
+                <option value="">{t('admin.allRoles')}</option>
+                <option value="donor">{t('admin.donors')}</option>
+                <option value="requester">{t('admin.requesters')}</option>
+                <option value="hospital">{t('admin.hospitals')}</option>
               </select>
 
               {/* City filter */}
               <input
                 type="text"
-                placeholder="Filter by city"
+                placeholder={t('admin.filterCity')}
                 value={cityFilter}
                 onChange={(e) => setCityFilter(e.target.value)}
                 className="bg-gray-50 border border-border px-3 py-2 text-xs font-semibold rounded-xl outline-none"
@@ -107,7 +105,7 @@ const ManageUsers = () => {
             {/* Search */}
             <input
               type="text"
-              placeholder="Search by name / email"
+              placeholder={t('admin.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full sm:w-64 bg-gray-50 border border-border px-3 py-2 text-xs font-semibold rounded-xl outline-none"
@@ -118,23 +116,23 @@ const ManageUsers = () => {
           <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden flex flex-col">
             {loading ? (
               <div className="p-8 text-center text-xs text-muted">
-                Loading users directory...
+                {t('admin.loadingUsers')}
               </div>
             ) : users.length === 0 ? (
               <div className="p-8 text-center text-xs text-muted">
-                No users found matching query
+                {t('admin.noUsers')}
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
                     <tr className="border-b border-border bg-gray-50 font-bold text-gray-400 uppercase tracking-widest text-[9px]">
-                      <th className="p-4">Name</th>
-                      <th className="p-4">Email</th>
-                      <th className="p-4">Role</th>
-                      <th className="p-4">Details</th>
-                      <th className="p-4 text-center">Status</th>
-                      <th className="p-4 text-right">Actions</th>
+                      <th className="p-4">{t('admin.tableName')}</th>
+                      <th className="p-4">{t('admin.tableEmail')}</th>
+                      <th className="p-4">{t('admin.tableRole')}</th>
+                      <th className="p-4">{t('admin.tableDetails')}</th>
+                      <th className="p-4 text-center">{t('admin.tableStatus')}</th>
+                      <th className="p-4 text-right">{t('admin.tableActions')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -152,13 +150,13 @@ const ManageUsers = () => {
                           </span>
                         </td>
                         <td className="p-4 whitespace-nowrap text-gray-400 font-semibold text-[10px]">
-                          City: <strong className="text-secondary capitalize">{u.city}</strong>
+                          {t('common.city')}: <strong className="text-secondary capitalize">{u.city}</strong>
                           {u.role === 'donor' && (
                             <>
                               <span className="mx-1">•</span>
-                              Group: <strong className="text-secondary">{u.bloodType}</strong>
+                              {t('admin.group')}: <strong className="text-secondary">{u.bloodType}</strong>
                               <span className="mx-1">•</span>
-                              DRS: <strong className="text-primary">{u.drsScore}</strong>
+                              {t('admin.drs')}: <strong className="text-primary">{u.drsScore}</strong>
                             </>
                           )}
                         </td>
@@ -168,7 +166,7 @@ const ManageUsers = () => {
                               u.isActive ? 'bg-green-100 text-success' : 'bg-gray-200 text-gray-500'
                             }`}
                           >
-                            {u.isActive ? 'Active' : 'Suspended'}
+                            {u.isActive ? t('admin.active') : t('admin.suspended')}
                           </span>
                         </td>
                         <td className="p-4 whitespace-nowrap text-right flex justify-end gap-2">
@@ -177,7 +175,7 @@ const ManageUsers = () => {
                               onClick={() => handleVerify(u._id)}
                               className="bg-success text-white px-2 py-1 text-[10px] font-extrabold uppercase rounded shadow-sm hover:bg-success/90 transition-all flex items-center gap-0.5"
                             >
-                              <LuCheck /> Verify
+                              <LuCheck /> {t('admin.verify')}
                             </button>
                           )}
                           {u.role !== 'admin' && (
@@ -190,7 +188,7 @@ const ManageUsers = () => {
                               }`}
                             >
                               <LuSlash />
-                              {u.isActive ? 'Suspend' : 'Activate'}
+                              {u.isActive ? t('admin.suspend') : t('admin.activate')}
                             </button>
                           )}
                         </td>

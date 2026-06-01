@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { NotificationContext } from '../../context/NotificationContext';
 import Navbar from '../../components/common/Navbar';
 import Sidebar from '../../components/common/Sidebar';
@@ -8,6 +9,7 @@ import api from '../../services/api';
 import { LuUsers, LuCheck, LuArrowLeft } from 'react-icons/lu';
 
 const MatchedDonors = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToast } = useContext(NotificationContext);
@@ -41,14 +43,14 @@ const MatchedDonors = () => {
       const res = await api.put(`/requests/${id}/confirm/${donorId}`);
       if (res.data.success) {
         addToast(
-          '🥇 Donor Confirmed',
-          'Donor commitment registered! Contact information is now revealed on your dashboard.',
+          t('requester.commitmentRegistered'),
+          t('requester.youAreCoordinating'),
           'general'
         );
         navigate('/dashboard');
       }
     } catch (error) {
-      addToast('❌ Action Failed', error.response?.data?.message || 'Failed to confirm donor', 'sos_alert');
+      addToast(t('common.errorRetry'), error.response?.data?.message || t('requester.confirmFailed', 'Failed to confirm donor'), 'sos_alert');
     }
     setConfirmingId(null);
   };
@@ -69,21 +71,21 @@ const MatchedDonors = () => {
             </Link>
             <div>
               <h2 className="text-xl font-bold text-secondary flex items-center gap-2">
-                <LuUsers /> Compatible Donors Matching
+                <LuUsers /> {t('requester.matchingTitle')}
               </h2>
               <p className="text-xs text-gray-500 mt-1">
-                Showing compatible verified donors in city. DRS ranks reliability descending.
+                {t('requester.matchingSubtitle')}
               </p>
             </div>
           </div>
 
           {loading ? (
             <div className="p-8 text-center text-xs text-muted">
-              Matching compatibility list...
+              {t('requester.loadingMatches')}
             </div>
           ) : !request ? (
             <div className="p-8 text-center text-xs text-muted">
-              Request not found
+              {t('requester.requestNotFound')}
             </div>
           ) : (
             <div className="flex flex-col gap-6">
@@ -95,10 +97,10 @@ const MatchedDonors = () => {
                   </div>
                   <div>
                     <h3 className="font-extrabold text-secondary text-sm">
-                      Patient: {request.patientName} ({request.bloodType})
+                      {t('requester.requestSummaryPatient')}: {request.patientName} ({request.bloodType})
                     </h3>
                     <span className="text-[10px] text-gray-400 font-bold block mt-0.5 uppercase tracking-wider">
-                      📍 {request.hospitalName}, {request.city} • Units: {request.unitsRequired}
+                      📍 {request.hospitalName}, {request.city} • {t('requester.requestSummaryUnits')}: {request.unitsRequired}
                     </span>
                   </div>
                 </div>
@@ -109,21 +111,21 @@ const MatchedDonors = () => {
                       : 'bg-gray-50 border-border text-gray-600'
                   }`}
                 >
-                  Urgency: {request.urgency}
+                  {t('requester.requestSummaryUrgency')}: {request.urgency}
                 </span>
               </div>
 
               {/* List of matching donors */}
               <h3 className="font-bold text-xs uppercase tracking-widest text-primary mt-2">
-                Top Compatible Donors List (sorted by DRS Score)
+                {t('requester.topDonors')}
               </h3>
 
               {matchedDonors.length === 0 ? (
                 <div className="flex flex-col items-center justify-center text-center p-8 bg-white border border-border rounded-2xl min-h-60 shadow-sm">
                   <span className="text-4xl mb-3">🔍</span>
-                  <h4 className="font-bold text-secondary text-sm">No Compatible Donors Available</h4>
+                  <h4 className="font-bold text-secondary text-sm">{t('requester.noCompatibleDonors')}</h4>
                   <p className="text-xs text-gray-500 max-w-md mt-1 leading-relaxed">
-                    There are currently no compatible verified blood donors marked as "Available" in your city. If this is critical, Hospital coordinators can trigger the high-alert SOS broadcast!
+                    {t('requester.noCompatibleDonorsDescription')}
                   </p>
                 </div>
               ) : (
@@ -149,14 +151,14 @@ const MatchedDonors = () => {
                               <h4 className="font-extrabold text-secondary text-sm">{donor.name}</h4>
                               {respondedToThis && (
                                 <span className="bg-green-100 text-success text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded">
-                                  ✓ Responded Willing
+                                  ✓ {t('requester.responded')}
                                 </span>
                               )}
                             </div>
                             <div className="flex gap-4 items-center mt-1 text-[10px] text-gray-400 font-bold uppercase tracking-wider">
-                              <span>Blood Group: <strong className="text-secondary">{donor.bloodType}</strong></span>
+                              <span>{t('requester.bloodGroup')}: <strong className="text-secondary">{donor.bloodType}</strong></span>
                               <span>•</span>
-                              <span>Donations saved: <strong className="text-secondary">{donor.totalDonations}</strong></span>
+                              <span>{t('requester.donationsSaved')}: <strong className="text-secondary">{donor.totalDonations}</strong></span>
                             </div>
                           </div>
                         </div>
@@ -178,7 +180,7 @@ const MatchedDonors = () => {
                             }`}
                           >
                             <LuCheck />
-                            {confirmingId === donor._id ? 'Confirming...' : 'Confirm Donor'}
+                            {confirmingId === donor._id ? t('requester.confirming') : t('requester.confirmDonor')}
                           </button>
                         </div>
                       </div>

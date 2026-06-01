@@ -6,12 +6,14 @@ import Navbar from '../../components/common/Navbar';
 import Sidebar from '../../components/common/Sidebar';
 import DRSBadge from '../../components/common/DRSBadge';
 import api from '../../services/api';
+import useGuide from '../../hooks/useGuide';
 import { LuHeartPulse, LuCalendar, LuTrophy, LuActivity, LuAward } from 'react-icons/lu';
 
 const DonorDashboard = () => {
   const { t } = useTranslation();
   const { user, updateUserProfile } = useContext(AuthContext);
   const { addToast } = useContext(NotificationContext);
+  const { autoStart } = useGuide('donor');
 
   const [leaderboard, setLeaderboard] = useState([]);
   const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
@@ -50,6 +52,10 @@ const DonorDashboard = () => {
     fetchResponses();
   }, [user?.showOnLeaderboard, user?.city]);
 
+  useEffect(() => {
+    autoStart();
+  }, []);
+
   const handleOptIn = async () => {
     try {
       const res = await api.put('/donors/profile', { showOnLeaderboard: true });
@@ -79,12 +85,14 @@ const DonorDashboard = () => {
         <Sidebar />
         <main className="flex-1 p-6 max-w-6xl mx-auto flex flex-col gap-6">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-border shadow-sm">
+          <div id="guide-welcome" className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-border shadow-sm">
             <div>
               <h2 className="text-xl font-bold text-secondary">{t('donor.welcomeBack', { name: user?.name })}</h2>
               <p className="text-xs text-gray-500 mt-1">{t('donor.registeredAs', { bloodType: user?.bloodType, city: user?.city })}</p>
             </div>
-            <DRSBadge score={user?.drsScore || 50} />
+            <div id="guide-drs">
+              <DRSBadge score={user?.drsScore || 50} />
+            </div>
           </div>
 
           {/* Cooldown Active Banner */}
@@ -102,7 +110,7 @@ const DonorDashboard = () => {
           )}
 
           {/* Quick Metrics grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div id="guide-stats" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="p-5 rounded-2xl bg-white border border-border shadow-sm flex items-center gap-4">
               <div className="h-10 w-10 bg-red-50 rounded-xl text-primary flex items-center justify-center text-lg border border-red-100">
                 <LuHeartPulse />

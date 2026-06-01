@@ -60,7 +60,7 @@ const Register = () => {
     if (res.success) {
       navigate('/dashboard');
     } else {
-      setError(res.message || 'Registration failed');
+      setError(res.message || t('auth.registrationFailed', 'Registration failed'));
     }
   };
 
@@ -88,17 +88,17 @@ const Register = () => {
       }));
       setError('');
     } else {
-      setError(res.message || 'Google sign-in failed');
+      setError(res.message || t('auth.googleSignInFailed', 'Google sign-in failed'));
     }
   };
 
   const handleGoogleButtonClick = () => {
     if (!GOOGLE_CLIENT_ID) {
-      setError('Google Sign-In is not configured. Please add your VITE_GOOGLE_CLIENT_ID.');
+      setError(t('auth.googleNotConfigured', 'Google Sign-In is not configured. Please add your VITE_GOOGLE_CLIENT_ID.'));
       return;
     }
     if (!window.google) {
-      setError('Google Identity Services failed to load. Please refresh the page.');
+      setError(t('auth.googleLoadFailed', 'Google Identity Services failed to load. Please refresh the page.'));
       return;
     }
     window.google.accounts.id.initialize({
@@ -135,10 +135,10 @@ const Register = () => {
             <span className="text-4xl mb-3 animate-pulse">🩸</span>
           )}
           <h2 className="text-2xl font-bold text-secondary">
-            {isGoogleFlow ? `Welcome, ${googleState.googleName?.split(' ')[0]}!` : 'Join BloodBridge Network'}
+            {isGoogleFlow ? `Welcome, ${googleState.googleName?.split(' ')[0]}!` : t('auth.registerTitle')}
           </h2>
           <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mt-1">
-            {isGoogleFlow ? 'Complete your profile to continue' : 'Create account and connect instantly'}
+            {isGoogleFlow ? t('auth.completeProfile') : t('auth.registerSubtitle')}
           </p>
         </div>
 
@@ -170,12 +170,12 @@ const Register = () => {
                   <path fill="#34A853" d="M24 48c6 0 11-2 14.7-5.3l-7.5-5.8c-2 1.3-4.6 2.1-7.2 2.1-6.2 0-11.5-3.6-13.3-9.3l-8 6.1C6.8 42.6 14.8 48 24 48z"/>
                 </svg>
               )}
-              {googleLoading ? 'Signing up with Google...' : 'Continue with Google'}
+              {googleLoading ? t('auth.googleSigningIn') : t('auth.googleContinue')}
             </button>
 
             <div className="flex items-center gap-3 mb-5">
               <div className="flex-1 h-px bg-gray-100"></div>
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Or register with email</span>
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{t('auth.orRegisterWithEmail')}</span>
               <div className="flex-1 h-px bg-gray-100"></div>
             </div>
           </>
@@ -184,7 +184,7 @@ const Register = () => {
         {/* ── Google flow info banner ── */}
         {isGoogleFlow && (
           <div className="bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold px-4 py-3 rounded-xl mb-5 flex items-center gap-2">
-            ✅ Google account verified — just select your role and city to get started!
+            {t('auth.googleVerified')}
           </div>
         )}
 
@@ -227,7 +227,7 @@ const Register = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder="Rahul Sharma"
+                    placeholder={t('auth.namePlaceholder', 'Rahul Sharma')}
                     className="w-full bg-gray-50 border border-border focus:border-primary focus:bg-white rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium outline-none transition-all"
                   />
                 </div>
@@ -248,7 +248,7 @@ const Register = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="rahul@example.com"
+                    placeholder={t('auth.emailPlaceholder')}
                     className="w-full bg-gray-50 border border-border focus:border-primary focus:bg-white rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium outline-none transition-all"
                   />
                 </div>
@@ -269,7 +269,7 @@ const Register = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder="••••••••"
+                    placeholder={t('auth.passwordPlaceholder')}
                     className="w-full bg-gray-50 border border-border focus:border-primary focus:bg-white rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium outline-none transition-all"
                   />
                 </div>
@@ -289,7 +289,7 @@ const Register = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="9876543210"
+                  placeholder={t('auth.phonePlaceholder', '9876543210')}
                   className="w-full bg-gray-50 border border-border focus:border-primary focus:bg-white rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium outline-none transition-all"
                 />
               </div>
@@ -308,7 +308,7 @@ const Register = () => {
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
-                  placeholder="Mumbai"
+                  placeholder={t('auth.cityPlaceholder', 'Mumbai')}
                   className="w-full bg-gray-50 border border-border focus:border-primary focus:bg-white rounded-xl pl-11 pr-4 py-2.5 text-sm font-medium outline-none transition-all"
                 />
               </div>
@@ -340,7 +340,7 @@ const Register = () => {
             className="w-full bg-primary hover:bg-primary-light disabled:bg-gray-400 text-white font-bold uppercase tracking-wider text-xs py-4 rounded-xl shadow-lg shadow-red-500/10 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 mt-4"
           >
             <LuHeartHandshake className="text-base" />
-            {loading ? t('common.loading', 'Loading...') : (isGoogleFlow ? 'Complete Registration' : t('auth.signUp', 'Sign Up'))}
+            {loading ? t('common.loading', 'Loading...') : (isGoogleFlow ? t('auth.completeRegistration') : t('auth.signUp', 'Sign Up'))}
           </button>
         </form>
 

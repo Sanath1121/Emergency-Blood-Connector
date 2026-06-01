@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NotificationContext } from '../../context/NotificationContext';
 import Navbar from '../../components/common/Navbar';
 import Sidebar from '../../components/common/Sidebar';
@@ -6,6 +7,7 @@ import api from '../../services/api';
 import { LuDatabase, LuPlus, LuTrash, LuSave, LuX } from 'react-icons/lu';
 
 const ManageBloodBanks = () => {
+  const { t } = useTranslation();
   const { addToast } = useContext(NotificationContext);
 
   const [banks, setBanks] = useState([]);
@@ -97,31 +99,31 @@ const ManageBloodBanks = () => {
       if (editingId) {
         const res = await api.put(`/bloodbanks/${editingId}`, formData);
         if (res.data.success) {
-          addToast('✅ Success', 'Blood bank updated successfully!', 'general');
+          addToast(t('admin.bloodBankUpdated'), t('admin.bloodBankUpdated'), 'general');
         }
       } else {
         const res = await api.post('/bloodbanks', formData);
         if (res.data.success) {
-          addToast('✅ Success', 'Blood bank created successfully!', 'general');
+          addToast(t('admin.bloodBankCreated'), t('admin.bloodBankCreated'), 'general');
         }
       }
       handleReset();
       fetchBanks();
     } catch (error) {
-      addToast('❌ Action Failed', error.response?.data?.message || 'Action failed', 'sos_alert');
+      addToast(t('common.errorRetry'), error.response?.data?.message || t('common.errorRetry'), 'sos_alert');
     }
   };
 
   const handleDelete = async (bankId) => {
-    if (!window.confirm('Are you sure you want to remove this blood bank?')) return;
+    if (!window.confirm(t('admin.cancelRequestConfirm', 'Are you sure you want to remove this blood bank?'))) return;
     try {
       const res = await api.delete(`/bloodbanks/${bankId}`);
       if (res.data.success) {
-        addToast('🗑️ Removed', 'Blood bank removed successfully!', 'general');
+        addToast(t('admin.bloodBankRemoved'), t('admin.bloodBankRemoved'), 'general');
         fetchBanks();
       }
     } catch (error) {
-      addToast('❌ Action Failed', error.response?.data?.message || 'Deletion failed', 'sos_alert');
+      addToast(t('common.errorRetry'), error.response?.data?.message || t('admin.deleteFailed', 'Deletion failed'), 'sos_alert');
     }
   };
 
@@ -135,10 +137,10 @@ const ManageBloodBanks = () => {
           <div className="flex justify-between items-center border-b border-border pb-4">
             <div>
               <h2 className="text-xl font-bold text-secondary flex items-center gap-2">
-                <LuDatabase /> Manage Blood Banks Directory
+                <LuDatabase /> {t('admin.manageBanksTitle')}
               </h2>
               <p className="text-xs text-gray-500 mt-1">
-                Add locations, update stock numbers, and manage coordinates.
+                {t('admin.manageBanksSubtitle')}
               </p>
             </div>
             {!showForm && (
@@ -146,7 +148,7 @@ const ManageBloodBanks = () => {
                 onClick={() => setShowForm(true)}
                 className="bg-primary hover:bg-primary-light text-white text-xs font-bold uppercase tracking-widest px-4 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-1"
               >
-                <LuPlus /> Add Blood Bank
+                <LuPlus /> {t('admin.addBank')}
               </button>
             )}
           </div>
@@ -157,12 +159,12 @@ const ManageBloodBanks = () => {
               className="bg-white p-6 rounded-2xl border border-border shadow-sm flex flex-col gap-4 max-w-2xl"
             >
               <h3 className="font-extrabold text-secondary text-sm">
-                {editingId ? 'Edit Blood Bank Registry' : 'Register New Blood Bank'}
+                {editingId ? t('admin.editBank') : t('admin.registerBank')}
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase">Bank Name</label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase">{t('admin.bankName')}</label>
                   <input
                     type="text"
                     required
@@ -173,7 +175,7 @@ const ManageBloodBanks = () => {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase">City</label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase">{t('common.city')}</label>
                   <input
                     type="text"
                     required
@@ -184,7 +186,7 @@ const ManageBloodBanks = () => {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase">Address</label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase">{t('admin.tableLocation', 'Address')}</label>
                   <input
                     type="text"
                     name="address"
@@ -194,7 +196,7 @@ const ManageBloodBanks = () => {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase">Phone</label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase">{t('admin.tableContact')}</label>
                   <input
                     type="text"
                     name="phone"
@@ -204,7 +206,7 @@ const ManageBloodBanks = () => {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase">Latitude</label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase">{t('admin.latitude')}</label>
                   <input
                     type="number"
                     step="any"
@@ -215,7 +217,7 @@ const ManageBloodBanks = () => {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase">Longitude</label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase">{t('admin.longitude')}</label>
                   <input
                     type="number"
                     step="any"
@@ -230,7 +232,7 @@ const ManageBloodBanks = () => {
               {/* Stock quantities inputs */}
               <div className="border-t border-border pt-3">
                 <label className="text-[10px] font-bold text-gray-400 uppercase block mb-2">
-                  Inventory Stock (Units)
+                  {t('admin.inventoryStock')}
                 </label>
                 <div className="grid grid-cols-4 gap-3">
                   {Object.keys(formData.availability).map((type) => (
@@ -256,13 +258,13 @@ const ManageBloodBanks = () => {
                   onClick={handleReset}
                   className="px-4 py-2 border border-border rounded-lg text-xs font-bold text-gray-500 hover:bg-gray-50 flex items-center gap-1"
                 >
-                  <LuX /> Cancel
+                  <LuX /> {t('admin.cancelForm')}
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-primary text-white rounded-lg text-xs font-bold hover:bg-primary-light flex items-center gap-1 shadow-md"
                 >
-                  <LuSave /> Save Registry
+                  <LuSave /> {t('admin.saveRegistry')}
                 </button>
               </div>
             </form>
@@ -272,22 +274,22 @@ const ManageBloodBanks = () => {
           <div className="bg-white rounded-2xl border border-border shadow-sm flex flex-col min-h-60 overflow-hidden">
             {loading ? (
               <div className="p-8 text-center text-xs text-muted">
-                Loading database directory...
+                {t('admin.loadingBanks')}
               </div>
             ) : banks.length === 0 ? (
               <div className="p-8 text-center text-xs text-muted">
-                No blood banks listed yet
+                {t('admin.noBanks')}
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
                     <tr className="border-b border-border bg-gray-50 font-bold text-gray-400 uppercase tracking-widest text-[9px]">
-                      <th className="p-4">Name</th>
-                      <th className="p-4">Address</th>
-                      <th className="p-4">Contact</th>
-                      <th className="p-4">GPS Coordinates</th>
-                      <th className="p-4 text-right">Actions</th>
+                      <th className="p-4">{t('admin.tableName')}</th>
+                      <th className="p-4">{t('admin.tableLocation')}</th>
+                      <th className="p-4">{t('admin.tableContact')}</th>
+                      <th className="p-4">{t('admin.tableGPS')}</th>
+                      <th className="p-4 text-right">{t('admin.tableActions')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -296,7 +298,7 @@ const ManageBloodBanks = () => {
                         <td className="p-4 whitespace-nowrap font-bold text-secondary">
                           {bank.name}
                           <span className="text-[9px] text-gray-400 font-extrabold block uppercase mt-0.5">
-                            City: {bank.city}
+                            {t('common.city')}: {bank.city}
                           </span>
                         </td>
                         <td className="p-4 whitespace-nowrap text-gray-500 font-semibold">
@@ -306,20 +308,20 @@ const ManageBloodBanks = () => {
                           {bank.phone || 'N/A'}
                         </td>
                         <td className="p-4 whitespace-nowrap text-gray-400 font-semibold text-[10px]">
-                          Lat: <strong className="text-secondary">{bank.latitude || 'N/A'}</strong> • Lon: <strong className="text-secondary">{bank.longitude || 'N/A'}</strong>
+                          {t('admin.latitude')}: <strong className="text-secondary">{bank.latitude || 'N/A'}</strong> • {t('admin.longitude')}: <strong className="text-secondary">{bank.longitude || 'N/A'}</strong>
                         </td>
                         <td className="p-4 whitespace-nowrap text-right flex justify-end gap-2">
                           <button
                             onClick={() => handleEdit(bank)}
                             className="bg-secondary text-white px-2 py-1 text-[10px] font-extrabold uppercase rounded shadow-sm hover:bg-secondary/90 transition-all flex items-center gap-0.5"
                           >
-                            <LuSave /> Edit
+                            <LuSave /> {t('admin.editBank')}
                           </button>
                           <button
                             onClick={() => handleDelete(bank._id)}
                             className="bg-primary text-white px-2 py-1 text-[10px] font-extrabold uppercase rounded shadow-sm hover:bg-primary-light transition-all flex items-center gap-0.5"
                           >
-                            <LuTrash /> Delete
+                            <LuTrash /> {t('admin.remove')}
                           </button>
                         </td>
                       </tr>
