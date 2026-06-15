@@ -29,3 +29,7 @@ Desktop.ini
 # Local seed scripts
 server/seed.js
 server/seed*.js
+
+# Project-specific generated artifacts
+BloodBridge_Agent_Prompt.md
+server/test*.js
