@@ -1,10 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import Navbar from '../../components/common/Navbar';
 import Sidebar from '../../components/common/Sidebar';
 import api from '../../services/api';
 import useGuide from '../../hooks/useGuide';
 import { LuUsers, LuHeartPulse, LuFlame, LuTrophy, LuActivity, LuUserCheck } from 'react-icons/lu';
+
+const listVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
 
 const AdminDashboard = () => {
   const { t } = useTranslation();
@@ -50,8 +60,14 @@ const AdminDashboard = () => {
           ) : (
             <div className="flex flex-col gap-6">
               {/* Aggregates Card Grid */}
-              <div id="guide-stats" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="p-5 rounded-2xl bg-white border border-border shadow-sm flex items-center gap-4">
+              <motion.div 
+                variants={listVariants}
+                initial="hidden"
+                animate="show"
+                id="guide-stats" 
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+              >
+                <motion.div variants={itemVariants} className="p-5 rounded-2xl bg-white border border-border shadow-sm hover:shadow-md transition-all flex items-center gap-4">
                   <div className="h-10 w-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center text-lg border border-blue-100">
                     <LuUsers />
                   </div>
@@ -63,9 +79,9 @@ const AdminDashboard = () => {
                       {stats?.totalUsers || 0}
                     </h3>
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="p-5 rounded-2xl bg-white border border-border shadow-sm flex items-center gap-4">
+                <motion.div variants={itemVariants} className="p-5 rounded-2xl bg-white border border-border shadow-sm hover:shadow-md transition-all flex items-center gap-4">
                   <div className="h-10 w-10 bg-red-50 text-primary rounded-xl flex items-center justify-center text-lg border border-red-100 animate-pulse">
                     <LuHeartPulse />
                   </div>
@@ -77,9 +93,9 @@ const AdminDashboard = () => {
                       {stats?.activeRequests || 0}
                     </h3>
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="p-5 rounded-2xl bg-white border border-border shadow-sm flex items-center gap-4">
+                <motion.div variants={itemVariants} className="p-5 rounded-2xl bg-white border border-border shadow-sm hover:shadow-md transition-all flex items-center gap-4">
                   <div className="h-10 w-10 bg-green-50 text-success rounded-xl flex items-center justify-center text-lg border border-green-100">
                     <LuUserCheck />
                   </div>
@@ -91,9 +107,9 @@ const AdminDashboard = () => {
                       {stats?.verifiedDonors || 0} / {stats?.totalDonors || 0}
                     </h3>
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="p-5 rounded-2xl bg-white border border-border shadow-sm flex items-center gap-4">
+                <motion.div variants={itemVariants} className="p-5 rounded-2xl bg-white border border-border shadow-sm hover:shadow-md transition-all flex items-center gap-4">
                   <div className="h-10 w-10 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center text-lg border border-amber-100">
                     <LuTrophy />
                   </div>
@@ -105,8 +121,8 @@ const AdminDashboard = () => {
                       {stats?.fulfilledRequests || 0}
                     </h3>
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
 
               {/* Leaderboard & City stats */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

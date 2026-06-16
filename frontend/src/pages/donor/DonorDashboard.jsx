@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '../../context/AuthContext';
 import { NotificationContext } from '../../context/NotificationContext';
 import Navbar from '../../components/common/Navbar';
@@ -8,6 +9,16 @@ import DRSBadge from '../../components/common/DRSBadge';
 import api from '../../services/api';
 import useGuide from '../../hooks/useGuide';
 import { LuHeartPulse, LuCalendar, LuTrophy, LuActivity, LuAward } from 'react-icons/lu';
+
+// Animation variants
+const listVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
 
 const DonorDashboard = () => {
   const { t } = useTranslation();
@@ -110,8 +121,14 @@ const DonorDashboard = () => {
           )}
 
           {/* Quick Metrics grid */}
-          <div id="guide-stats" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-5 rounded-2xl bg-white border border-border shadow-sm flex items-center gap-4">
+          <motion.div 
+            variants={listVariants}
+            initial="hidden"
+            animate="show"
+            id="guide-stats" 
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          >
+            <motion.div variants={itemVariants} className="p-5 rounded-2xl bg-white border border-border shadow-sm hover:shadow-md transition-all flex items-center gap-4">
               <div className="h-10 w-10 bg-red-50 rounded-xl text-primary flex items-center justify-center text-lg border border-red-100">
                 <LuHeartPulse />
               </div>
@@ -123,9 +140,9 @@ const DonorDashboard = () => {
                   {user?.totalDonations || 0}
                 </h3>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="p-5 rounded-2xl bg-white border border-border shadow-sm flex items-center gap-4">
+            <motion.div variants={itemVariants} className="p-5 rounded-2xl bg-white border border-border shadow-sm hover:shadow-md transition-all flex items-center gap-4">
               <div className="h-10 w-10 bg-orange-50 rounded-xl text-orange-500 flex items-center justify-center text-lg border border-orange-100">
                 <LuCalendar />
               </div>
@@ -143,9 +160,9 @@ const DonorDashboard = () => {
                   )}
                 </h3>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="p-5 rounded-2xl bg-white border border-border shadow-sm flex items-center gap-4 col-span-1 sm:col-span-2">
+            <motion.div variants={itemVariants} className="p-5 rounded-2xl bg-white border border-border shadow-sm hover:shadow-md transition-all flex items-center gap-4 col-span-1 sm:col-span-2">
               <div className="h-10 w-10 bg-amber-50 rounded-xl text-amber-500 flex items-center justify-center text-lg border border-amber-100">
                 <LuAward />
               </div>
@@ -169,8 +186,8 @@ const DonorDashboard = () => {
                   )}
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Bottom Grid: Leaderboard & Responded Requests */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

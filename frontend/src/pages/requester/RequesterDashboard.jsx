@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '../../context/AuthContext';
 import { NotificationContext } from '../../context/NotificationContext';
 import Navbar from '../../components/common/Navbar';
@@ -8,6 +9,16 @@ import Sidebar from '../../components/common/Sidebar';
 import api from '../../services/api';
 import useGuide from '../../hooks/useGuide';
 import { LuPlus, LuActivity, LuCheck, LuUsers, LuFlame } from 'react-icons/lu';
+
+// Animation variants
+const listVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
 
 const RequesterDashboard = () => {
   const { t } = useTranslation();
@@ -136,12 +147,21 @@ const RequesterDashboard = () => {
               <p className="text-xs text-gray-400 max-w-xs mt-1 leading-relaxed">{t('request.noRequestsDescription')}</p>
             </div>
           ) : (
-            <div id="guide-active-requests" className="flex flex-col gap-6">
-              {myRequests.map((req) => (
-                <div
-                  key={req._id}
-                  className="bg-white rounded-2xl border border-border p-6 shadow-sm flex flex-col gap-6 relative overflow-hidden"
-                >
+            <motion.div 
+              variants={listVariants}
+              initial="hidden"
+              animate="show"
+              id="guide-active-requests" 
+              className="flex flex-col gap-6"
+            >
+              <AnimatePresence>
+                {myRequests.map((req) => (
+                  <motion.div
+                    variants={itemVariants}
+                    layout
+                    key={req._id}
+                    className="bg-white rounded-2xl border border-border p-6 shadow-sm hover:shadow-md hover:border-red-200 transition-all flex flex-col gap-6 relative overflow-hidden"
+                  >
                   {/* Status Ribbon */}
                   <div
                     className={`absolute top-0 right-0 px-3 py-1 text-[9px] font-extrabold uppercase rounded-bl-xl tracking-wider text-white shadow-sm ${
@@ -263,9 +283,10 @@ const RequesterDashboard = () => {
                       ✓ Donation successfully completed and verified on {new Date(req.fulfilledAt).toLocaleDateString()}.
                     </div>
                   )}
-                </div>
-              ))}
-            </div>
+                </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
           )}
         </main>
       </div>

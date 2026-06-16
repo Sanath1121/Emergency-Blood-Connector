@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '../../context/AuthContext';
 import { NotificationContext } from '../../context/NotificationContext';
 import Navbar from '../../components/common/Navbar';
@@ -8,6 +9,16 @@ import Sidebar from '../../components/common/Sidebar';
 import api from '../../services/api';
 import useGuide from '../../hooks/useGuide';
 import { LuHospital, LuActivity, LuFlame, LuPlus, LuShieldAlert, LuDatabase } from 'react-icons/lu';
+
+// Animation variants
+const listVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
 
 const HospitalDashboard = () => {
   const { t } = useTranslation();
@@ -128,9 +139,15 @@ const HospitalDashboard = () => {
                   {t('hospital.noBanks', 'No blood bank directory entries listed in your city yet')}
                 </div>
               ) : (
-                <div className="flex flex-col gap-3 max-h-40 overflow-y-auto pr-1">
+                <motion.div 
+                  variants={listVariants}
+                  initial="hidden"
+                  animate="show"
+                  className="flex flex-col gap-3 max-h-40 overflow-y-auto pr-1"
+                >
                   {bloodBanks.map((bank) => (
-                    <div
+                    <motion.div
+                      variants={itemVariants}
                       key={bank._id}
                       className="p-3 bg-gray-50 border border-border rounded-xl flex flex-col sm:flex-row justify-between sm:items-center gap-3 text-xs"
                     >
@@ -150,9 +167,9 @@ const HospitalDashboard = () => {
                           </span>
                         ))}
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
               )}
             </div>
           </div>
@@ -173,60 +190,69 @@ const HospitalDashboard = () => {
                 <p className="mt-1">{t('hospital.noRequests', 'No requests posted by your institution yet.')}</p>
               </div>
             ) : (
-              <div className="flex flex-col gap-4">
-                {requests.map((req) => (
-                  <div
-                    key={req._id}
-                    className="p-4 bg-gray-50 border border-border rounded-xl flex flex-col sm:flex-row justify-between sm:items-center gap-4"
-                  >
-                    <div className="flex gap-4 items-center">
-                      <div className="h-10 w-10 bg-red-50 text-primary border border-red-100 flex items-center justify-center rounded-xl font-bold">
-                        {req.bloodType}
+              <motion.div 
+                variants={listVariants}
+                initial="hidden"
+                animate="show"
+                className="flex flex-col gap-4"
+              >
+                <AnimatePresence>
+                  {requests.map((req) => (
+                    <motion.div
+                      variants={itemVariants}
+                      layout
+                      key={req._id}
+                      className="p-4 bg-gray-50 border border-border rounded-xl flex flex-col sm:flex-row justify-between sm:items-center gap-4 hover:shadow-md hover:border-red-200 transition-all"
+                    >
+                      <div className="flex gap-4 items-center">
+                        <div className="h-10 w-10 bg-red-50 text-primary border border-red-100 flex items-center justify-center rounded-xl font-bold">
+                          {req.bloodType}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-secondary text-xs">
+                            Patient: {req.patientName} ({req.bloodType})
+                          </h4>
+                          <span className="text-[10px] text-gray-400 block mt-0.5 uppercase font-semibold">
+                            Units: {req.unitsRequired}u • Status: <strong className="text-secondary">{req.status}</strong>
+                          </span>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-bold text-secondary text-xs">
-                          Patient: {req.patientName} ({req.bloodType})
-                        </h4>
-                        <span className="text-[10px] text-gray-400 block mt-0.5 uppercase font-semibold">
-                          Units: {req.unitsRequired}u • Status: <strong className="text-secondary">{req.status}</strong>
-                        </span>
-                      </div>
-                    </div>
 
-                    <div className="flex gap-2 self-start sm:self-center">
-                      {req.status === 'open' && (
-                        <>
-                          <button
-                            onClick={() => handleSOS(req._id)}
-                            className="bg-primary hover:bg-primary-light text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-1"
-                          >
-                            <LuFlame className="text-xs" /> {t('request.triggerSOS')}
-                          </button>
+                      <div className="flex gap-2 self-start sm:self-center">
+                        {req.status === 'open' && (
+                          <>
+                            <button
+                              onClick={() => handleSOS(req._id)}
+                              className="bg-primary hover:bg-primary-light text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-1"
+                            >
+                              <LuFlame className="text-xs" /> {t('request.triggerSOS')}
+                            </button>
+                            <Link
+                              to={`/requests/${req._id}/matches`}
+                              className="bg-secondary hover:bg-secondary/90 text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-lg shadow-sm transition-all"
+                            >
+                              {t('request.viewMatches', { count: req.respondedDonors?.length || 0 })}
+                            </Link>
+                          </>
+                        )}
+                        {req.status === 'matched' && (
                           <Link
-                            to={`/requests/${req._id}/matches`}
-                            className="bg-secondary hover:bg-secondary/90 text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-lg shadow-sm transition-all"
+                            to="/dashboard"
+                            className="bg-success text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-lg shadow-sm transition-all"
                           >
-                            {t('request.viewMatches', { count: req.respondedDonors?.length || 0 })}
+                            {t('hospital.manageDonor', 'Manage Donor')}
                           </Link>
-                        </>
-                      )}
-                      {req.status === 'matched' && (
-                        <Link
-                          to="/dashboard"
-                          className="bg-success text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-lg shadow-sm transition-all"
-                        >
-                          {t('hospital.manageDonor', 'Manage Donor')}
-                        </Link>
-                      )}
-                      {req.status === 'fulfilled' && (
-                        <span className="text-[10px] font-bold text-success bg-green-50 border border-green-200 px-3 py-1.5 rounded-lg">
-                          Fulfilled ✓
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                        )}
+                        {req.status === 'fulfilled' && (
+                          <span className="text-[10px] font-bold text-success bg-green-50 border border-green-200 px-3 py-1.5 rounded-lg">
+                            Fulfilled ✓
+                          </span>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </motion.div>
             )}
           </div>
         </main>
