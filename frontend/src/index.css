@@ -2,46 +2,114 @@
 @import "leaflet/dist/leaflet.css";
 
 @theme {
-  --color-primary: #C0392B;
-  --color-primary-light: #E74C3C;
-  --color-secondary: #2C3E50;
-  --color-surface: #FFFFFF;
-  --color-background: #F8F9FA;
-  --color-muted: #6C757D;
-  --color-success: #27AE60;
-  --color-warning: #F39C12;
-  --color-danger: #C0392B;
-  --color-border-custom: #E9ECEF;
+  --color-primary: #FF3B30;
+  --color-primary-light: #FF5E5B;
+  --color-secondary: #E2E8F0;
+  --color-surface: #12131A;
+  --color-background: #08080C;
+  --color-muted: #94A3B8;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-border-custom: #1E293B;
+  --color-border: #1E293B;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--color-background);
   color: var(--color-secondary);
+  overflow-x: hidden;
 }
 
 /* Custom scrollbars for dashboard feel */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #08080C;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
+  background: #1E293B;
+  border-radius: 99px;
+  border: 2px solid #08080C;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #334155;
 }
 
-/* Leaflet Map sizing */
+/* Leaflet Map sizing styled dark */
 .leaflet-container {
   width: 100%;
   height: 500px;
-  border-radius: 12px;
+  border-radius: 20px;
   z-index: 1;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  box-shadow: 0 0 25px rgba(255, 59, 48, 0.1);
+  filter: invert(90%) hue-rotate(180deg) brightness(85%) contrast(110%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Glassmorphism utility helper */
+.glass-panel {
+  background: rgba(18, 19, 26, 0.65);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glow-primary {
+  box-shadow: 0 0 20px rgba(255, 59, 48, 0.25);
+}
+
+.glow-text-primary {
+  text-shadow: 0 0 10px rgba(255, 59, 48, 0.5);
+}
+
+/* Wave Animation for visual liquid gauge */
+@keyframes wave-move {
+  0% {
+    transform: translateX(0) translateZ(0) scaleY(1);
+  }
+  50% {
+    transform: translateX(-25%) translateZ(0) scaleY(0.85);
+  }
+  100% {
+    transform: translateX(-50%) translateZ(0) scaleY(1);
+  }
+}
+
+.liquid-wave {
+  animation: wave-move 8s linear infinite;
+}
+
+/* Custom glowing alerts pulse */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(255, 59, 48, 0.2);
+    border-color: rgba(255, 59, 48, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 59, 48, 0.5);
+    border-color: rgba(255, 59, 48, 0.5);
+  }
+}
+
+.pulse-glow-red {
+  animation: glow-pulse 2s infinite ease-in-out;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
 }

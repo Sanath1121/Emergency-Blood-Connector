@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import { AuthContext } from '../../context/AuthContext';
 import { NotificationContext } from '../../context/NotificationContext';
 import Navbar from '../../components/common/Navbar';
@@ -65,85 +66,115 @@ const HospitalDashboard = () => {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background text-white">
       <Navbar />
       <div className="flex">
         <Sidebar />
         <main className="flex-1 p-6 max-w-6xl mx-auto flex flex-col gap-6">
           {/* Header */}
-          <div id="guide-welcome" className="bg-white p-6 rounded-2xl border border-border shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <motion.div 
+            id="guide-welcome" 
+            className="bg-surface/50 p-6 rounded-3xl border border-white/5 shadow-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 backdrop-blur-xl"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
             <div className="flex items-center gap-3">
-              <div className="h-12 w-12 bg-red-50 text-primary border border-red-100 flex items-center justify-center rounded-2xl text-xl shadow-sm">
+              <div className="h-12 w-12 bg-primary/10 text-primary border border-primary/20 flex items-center justify-center rounded-2xl text-xl shadow-inner glow-primary">
                 <LuHospital />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-secondary">
+                <h2 className="text-xl font-black tracking-tight">
                   Hospital Coordinator Portal
                 </h2>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  Institution: **{user?.name}** • Region: **{user?.city}**
+                <p className="text-xs text-muted mt-1 font-semibold">
+                  Institution: <span className="text-white font-extrabold">{user?.name}</span> • Region: <span className="text-white font-extrabold">{user?.city}</span>
                 </p>
               </div>
             </div>
-            <Link
-              to="/requests/post"
-              className="bg-primary hover:bg-primary-light text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2"
-            >
-              <LuPlus />
-              Post Blood Request
-            </Link>
-          </div>
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Link
+                to="/requests/post"
+                className="bg-primary hover:bg-primary-light text-white text-[10px] font-black uppercase tracking-widest px-5 py-3.5 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center gap-2 border border-primary/20 cursor-pointer"
+              >
+                <LuPlus className="text-sm" />
+                Post Blood Request
+              </Link>
+            </motion.div>
+          </motion.div>
 
           {/* Quick Info Grid: SOS info & inventory check */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* SOS Broadcast Instructions */}
-            <div id="guide-sos" className="bg-gradient-to-br from-red-50 to-white p-6 rounded-2xl border border-red-100 shadow-sm lg:col-span-1 flex flex-col justify-between">
+            <motion.div 
+              id="guide-sos" 
+              className="bg-primary/5 p-6 rounded-3xl border border-primary/20 shadow-lg lg:col-span-1 flex flex-col justify-between"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+            >
               <div>
-                <span className="text-2xl">🚨</span>
-                <h3 className="font-extrabold text-red-950 text-sm mt-3 flex items-center gap-1.5">
+                <span className="text-3xl">🚨</span>
+                <h3 className="font-black text-white text-xs mt-3 flex items-center gap-1.5 uppercase tracking-wider">
                   Emergency SOS System
                 </h3>
-                <p className="text-xs text-red-800 leading-relaxed mt-2">
+                <p className="text-xs text-muted leading-relaxed mt-3 font-semibold">
                   As a hospital coordinator, you are authorized to trigger direct broadcast SOS alerts. This pushes high-volume websocket alerts and bypasses cooldown notification groups to compatible donors in your area.
                 </p>
               </div>
-              <div className="bg-red-50 border border-red-100 p-3 rounded-xl mt-4 flex items-center gap-2 text-[10px] font-bold text-red-900 uppercase">
+              <div className="bg-primary/10 border border-primary/20 p-3 rounded-xl mt-6 flex items-center gap-2 text-[9px] font-black text-primary-light uppercase tracking-widest pulsing-glow-red">
                 <LuShieldAlert className="text-sm" /> Authorized Personnel Only
               </div>
-            </div>
+            </motion.div>
 
             {/* Blood bank inventories widget */}
-            <div className="bg-white p-6 rounded-2xl border border-border shadow-sm lg:col-span-2 flex flex-col">
-              <h3 className="font-bold text-secondary text-xs uppercase tracking-wider mb-4 flex items-center gap-2">
-                <LuDatabase className="text-primary" /> City Blood Banks Inventories
+            <motion.div 
+              className="bg-surface/40 p-6 rounded-3xl border border-white/5 shadow-lg lg:col-span-2 flex flex-col backdrop-blur-md"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <h3 className="font-black text-white text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
+                <LuDatabase className="text-primary-light" /> City Blood Banks Inventories
               </h3>
 
               {loading ? (
-                <div className="flex-1 flex items-center justify-center text-xs text-muted">
+                <div className="flex-1 flex items-center justify-center text-xs text-muted font-bold animate-pulse">
                   {t('hospital.loadingStock', 'Loading stock data...')}
                 </div>
               ) : bloodBanks.length === 0 ? (
-                <div className="flex-1 flex items-center justify-center text-xs text-muted p-6">
+                <div className="flex-1 flex items-center justify-center text-xs text-muted p-6 font-semibold">
                   {t('hospital.noBanks', 'No blood bank directory entries listed in your city yet')}
                 </div>
               ) : (
-                <div className="flex flex-col gap-3 max-h-40 overflow-y-auto pr-1">
+                <div className="flex flex-col gap-3 max-h-48 overflow-y-auto pr-1">
                   {bloodBanks.map((bank) => (
                     <div
                       key={bank._id}
-                      className="p-3 bg-gray-50 border border-border rounded-xl flex flex-col sm:flex-row justify-between sm:items-center gap-3 text-xs"
+                      className="p-4 bg-background/40 border border-white/5 hover:border-white/10 rounded-2xl flex flex-col sm:flex-row justify-between sm:items-center gap-3 text-xs transition-all"
                     >
                       <div>
-                        <h4 className="font-bold text-secondary">{bank.name}</h4>
-                        <span className="text-[10px] text-gray-400 block mt-0.5">{bank.address}</span>
+                        <h4 className="font-extrabold text-white">{bank.name}</h4>
+                        <span className="text-[10px] text-muted block mt-1 font-semibold">{bank.address}</span>
                       </div>
-                      <div className="flex flex-wrap gap-1">
+                      <div className="flex flex-wrap gap-1.5">
                         {Object.entries(bank.availability).map(([type, units]) => (
                           <span
                             key={type}
-                            className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
-                              units > 5 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                            className={`px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider border ${
+                              units > 5 
+                                ? 'bg-success/10 border-success/20 text-success' 
+                                : 'bg-primary/10 border-primary/20 text-primary-light'
                             }`}
                           >
                             {type}: {units}u
@@ -154,81 +185,94 @@ const HospitalDashboard = () => {
                   ))}
                 </div>
               )}
-            </div>
+            </motion.div>
           </div>
 
           {/* Active Hospital Requests */}
-          <div className="bg-white p-6 rounded-2xl border border-border shadow-sm flex flex-col min-h-60">
-            <h3 className="font-bold text-secondary text-xs uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-border pb-3">
-              <LuActivity className="text-primary" /> Active Hospital Blood Requests
+          <motion.div 
+            className="bg-surface/40 p-6 rounded-3xl border border-white/5 shadow-lg flex flex-col min-h-[240px] backdrop-blur-md"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <h3 className="font-black text-white text-xs uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-white/5 pb-3">
+              <LuActivity className="text-primary-light" /> Active Hospital Blood Requests
             </h3>
 
             {loading ? (
-              <div className="p-8 text-center text-xs text-muted">
+              <div className="p-8 text-center text-xs text-muted font-bold animate-pulse">
                 {t('hospital.loadingRequests', 'Loading requests...')}
               </div>
             ) : requests.length === 0 ? (
-              <div className="p-8 text-center text-xs text-muted flex flex-col items-center justify-center min-h-40">
-                <span>📋</span>
+              <div className="p-8 text-center text-xs text-muted flex flex-col items-center justify-center min-h-[140px] font-semibold">
+                <span className="text-3xl mb-2">📋</span>
                 <p className="mt-1">{t('hospital.noRequests', 'No requests posted by your institution yet.')}</p>
               </div>
             ) : (
               <div className="flex flex-col gap-4">
                 {requests.map((req) => (
-                  <div
+                  <motion.div
                     key={req._id}
-                    className="p-4 bg-gray-50 border border-border rounded-xl flex flex-col sm:flex-row justify-between sm:items-center gap-4"
+                    className="p-4 bg-background/40 border border-white/5 hover:border-white/10 rounded-2xl flex flex-col sm:flex-row justify-between sm:items-center gap-4 transition-all"
+                    variants={cardVariants}
+                    whileHover={{ scale: 1.01 }}
                   >
                     <div className="flex gap-4 items-center">
-                      <div className="h-10 w-10 bg-red-50 text-primary border border-red-100 flex items-center justify-center rounded-xl font-bold">
+                      <div className="h-11 w-11 bg-primary/10 text-primary border border-primary/20 flex items-center justify-center rounded-xl font-black text-base shadow-inner">
                         {req.bloodType}
                       </div>
                       <div>
-                        <h4 className="font-bold text-secondary text-xs">
+                        <h4 className="font-extrabold text-white text-xs">
                           Patient: {req.patientName} ({req.bloodType})
                         </h4>
-                        <span className="text-[10px] text-gray-400 block mt-0.5 uppercase font-semibold">
-                          Units: {req.unitsRequired}u • Status: <strong className="text-secondary">{req.status}</strong>
+                        <span className="text-[10px] text-muted block mt-1 uppercase font-black tracking-wider">
+                          Units: <span className="text-white">{req.unitsRequired}u</span> • Status: <span className="text-primary-light">{req.status}</span>
                         </span>
                       </div>
                     </div>
 
-                    <div className="flex gap-2 self-start sm:self-center">
+                    <div className="flex gap-2.5 self-start sm:self-center">
                       {req.status === 'open' && (
                         <>
-                          <button
+                          <motion.button
                             onClick={() => handleSOS(req._id)}
-                            className="bg-primary hover:bg-primary-light text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-1"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="bg-primary hover:bg-primary-light text-white text-[9px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer pulsing-glow-red"
                           >
                             <LuFlame className="text-xs" /> {t('request.triggerSOS')}
-                          </button>
-                          <Link
-                            to={`/requests/${req._id}/matches`}
-                            className="bg-secondary hover:bg-secondary/90 text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-lg shadow-sm transition-all"
-                          >
-                            {t('request.viewMatches', { count: req.respondedDonors?.length || 0 })}
-                          </Link>
+                          </motion.button>
+                          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                            <Link
+                              to={`/requests/${req._id}/matches`}
+                              className="bg-surface hover:bg-surface-light border border-white/10 text-white text-[9px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl shadow-md transition-all block"
+                            >
+                              {t('request.viewMatches', { count: req.respondedDonors?.length || 0 })}
+                            </Link>
+                          </motion.div>
                         </>
                       )}
                       {req.status === 'matched' && (
-                        <Link
-                          to="/dashboard"
-                          className="bg-success text-white text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-lg shadow-sm transition-all"
-                        >
-                          {t('hospital.manageDonor', 'Manage Donor')}
-                        </Link>
+                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                          <Link
+                            to="/dashboard"
+                            className="bg-success text-white text-[9px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl shadow-md transition-all block"
+                          >
+                            {t('hospital.manageDonor', 'Manage Donor')}
+                          </Link>
+                        </motion.div>
                       )}
                       {req.status === 'fulfilled' && (
-                        <span className="text-[10px] font-bold text-success bg-green-50 border border-green-200 px-3 py-1.5 rounded-lg">
+                        <span className="text-[9px] font-black text-success bg-success/10 border border-success/20 px-3 py-2 rounded-xl uppercase tracking-wider">
                           Fulfilled ✓
                         </span>
                       )}
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             )}
-          </div>
+          </motion.div>
         </main>
       </div>
     </div>

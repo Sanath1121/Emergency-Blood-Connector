@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import {
   LuLayoutDashboard,
   LuPlus,
@@ -93,7 +94,7 @@ const Sidebar = () => {
   });
 
   return (
-    <aside className="w-64 border-r border-border bg-white flex flex-col min-h-[calc(100vh-4rem)] sticky top-16 shadow-sm">
+    <aside className="w-64 border-r border-white/5 bg-surface/30 backdrop-blur-xl flex flex-col min-h-[calc(100vh-4rem)] sticky top-16 shadow-lg text-white">
       {/* Navigation list */}
       <nav className="flex-1 px-4 py-6 flex flex-col gap-2">
         {navItems.map((item) => {
@@ -103,47 +104,54 @@ const Sidebar = () => {
               key={item.path}
               to={item.path}
               id={item.id || undefined}
-              className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold tracking-wide transition-all ${
+              className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all relative group overflow-hidden ${
                 isActive
-                  ? 'bg-primary text-white shadow-md shadow-red-500/20'
-                  : 'text-gray-600 hover:text-primary hover:bg-red-50'
+                  ? 'bg-primary text-white shadow-lg shadow-primary/20 border border-primary/20'
+                  : 'text-muted hover:text-white hover:bg-white/5 border border-transparent'
               }`}
             >
               {item.icon}
-              <span>{item.label}</span>
+              <span className="relative z-10">{item.label}</span>
+              
+              {/* Highlight strip on hover for inactive links */}
+              {!isActive && (
+                <div className="absolute left-0 top-0 bottom-0 w-0 bg-primary/20 transition-all group-hover:w-1.5" />
+              )}
             </NavLink>
           );
         })}
       </nav>
 
       {/* Take a Tour button */}
-      <div className="px-4 pb-2">
-        <button
+      <div className="px-4 pb-4">
+        <motion.button
           id="guide-tour-button"
           onClick={startGuide}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-red-200 text-primary text-xs font-bold uppercase tracking-wider hover:bg-red-50 transition-all"
+          whileHover={{ scale: 1.02, borderColor: 'rgba(255,59,48,0.4)', color: '#FF3B30' }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed border-white/10 text-muted text-[10px] font-black uppercase tracking-widest hover:bg-primary/5 transition-all cursor-pointer"
         >
-          <LuCompass className="text-base" />
+          <LuCompass className="text-sm" />
           Take a Tour
-        </button>
+        </motion.button>
       </div>
 
       {/* Quick info chip */}
-      <div className="p-4 border-t border-border bg-gray-50 flex items-center justify-between">
+      <div className="p-4 border-t border-white/5 bg-background/50 flex items-center justify-between">
         <div className="flex flex-col">
-          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+          <span className="text-[9px] font-black text-muted uppercase tracking-widest">
             City Room
           </span>
-          <span className="text-xs font-bold text-secondary capitalize mt-0.5">
+          <span className="text-xs font-bold text-white capitalize mt-1">
             📍 {user.city}
           </span>
         </div>
         {role === 'donor' && (
           <div className="flex flex-col text-right">
-            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+            <span className="text-[9px] font-black text-muted uppercase tracking-widest">
               Live Score
             </span>
-            <span className="text-xs font-bold text-primary mt-0.5">
+            <span className="text-xs font-black text-primary-light mt-1 glow-text-primary">
               🏆 {user.drsScore}
             </span>
           </div>
