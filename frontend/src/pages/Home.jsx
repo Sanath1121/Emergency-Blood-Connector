@@ -2,227 +2,202 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import Spline from '@splinetool/react-spline';
 import { AuthContext } from '../context/AuthContext';
-import { LuHeart, LuActivity, LuShieldCheck, LuSparkles, LuArrowRight } from 'react-icons/lu';
-
-// Animation Variants
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15 }
-  }
-};
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
-};
+import { LuHeart, LuActivity, LuShieldCheck, LuSparkles } from 'react-icons/lu';
+import BloodLoader3D from '../components/common/BloodLoader3D';
 
 const Home = () => {
   const { t } = useTranslation();
   const { isAuthenticated, user } = useContext(AuthContext);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: 'easeOut',
+      },
+    },
+  };
+
   return (
-    <div className="flex-1 bg-white min-h-[calc(100vh-4rem)] overflow-hidden">
+    <motion.div
+      className="flex-1 bg-background min-h-[calc(100vh-4rem)] text-white relative overflow-hidden flex flex-col"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
+      {/* Background neon blobs */}
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-primary-light/5 blur-[120px] pointer-events-none" />
+
       {/* Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center py-20 px-6 bg-gradient-to-br from-red-50/80 via-white to-red-50/30">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 w-full relative z-10">
-          
-          {/* Left Text Content */}
-          <motion.div 
-            variants={staggerContainer}
-            initial="hidden"
-            animate="show"
-            className="flex-1 text-center lg:text-left z-20"
+      <section className="relative py-20 px-6 max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-16 z-10 w-full flex-1">
+        <motion.div className="flex-1 text-center lg:text-left" variants={itemVariants}>
+          <motion.div
+            className="inline-flex items-center gap-1.5 bg-primary/10 text-primary-light border border-primary/20 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-6"
+            whileHover={{ scale: 1.05, border: '1px solid rgba(255,59,48,0.4)' }}
           >
-            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-red-50/80 backdrop-blur-sm text-primary border border-red-100 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-8 shadow-sm">
-              <LuSparkles className="animate-pulse" />
-              {t('home.heroTag')}
-            </motion.div>
-            
-            <motion.h1 variants={fadeInUp} className="text-5xl sm:text-6xl lg:text-7xl font-black text-secondary tracking-tighter leading-[1.1]">
-              {t('home.heroTitlePre')} <br />
-              <span className="relative inline-block mt-2">
-                <span className="relative z-10 bg-gradient-to-r from-primary via-red-500 to-orange-500 bg-clip-text text-transparent drop-shadow-sm">
-                  {t('home.heroTitleHighlight')}
-                </span>
-                <span className="absolute -inset-1 bg-red-100/50 blur-xl -z-10 rounded-full"></span>
-              </span>{' '}
-              <br className="hidden lg:block" />
-              {t('home.heroTitlePost')}
-            </motion.h1>
-            
-            <motion.p variants={fadeInUp} className="text-lg text-gray-500 max-w-xl mx-auto lg:mx-0 mt-8 leading-relaxed font-medium">
-              {t('home.heroDescription')}
-            </motion.p>
-            
-            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start mt-10">
-              {isAuthenticated ? (
-                <Link to="/dashboard">
-                  <motion.button
-                    whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(239, 68, 68, 0.3)" }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-full sm:w-auto bg-gradient-to-r from-primary to-red-600 text-white text-sm font-extrabold uppercase tracking-widest px-10 py-4 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2"
-                  >
-                    {t('home.goToDashboard', { role: user?.role })}
-                    <LuArrowRight className="text-lg" />
-                  </motion.button>
+            <LuSparkles className="animate-spin-slow" />
+            {t('home.heroTag')}
+          </motion.div>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15]">
+            {t('home.heroTitlePre')} <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary-light to-amber-500 font-extrabold glow-text-primary">
+              {t('home.heroTitleHighlight')}
+            </span>{' '}
+            {t('home.heroTitlePost')}
+          </h1>
+          <p className="text-sm text-muted max-w-lg mt-6 leading-relaxed font-medium">
+            {t('home.heroDescription')}
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-10">
+            {isAuthenticated ? (
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  to="/dashboard"
+                  className="block bg-primary hover:bg-primary-light text-white text-xs font-black uppercase tracking-widest px-8 py-4 rounded-2xl shadow-lg shadow-primary/30 transition-colors border border-primary/20"
+                >
+                  {t('home.goToDashboard', { role: user?.role })}
                 </Link>
-              ) : (
-                <>
-                  <Link to="/register">
-                    <motion.button
-                      whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(239, 68, 68, 0.3)" }}
-                      whileTap={{ scale: 0.95 }}
-                      className="w-full sm:w-auto bg-gradient-to-r from-primary to-red-600 text-white text-sm font-extrabold uppercase tracking-widest px-10 py-4 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2"
-                    >
-                      {t('home.registerAs')}
-                      <LuArrowRight className="text-lg" />
-                    </motion.button>
+              </motion.div>
+            ) : (
+              <>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                  <Link
+                    to="/register"
+                    className="block bg-primary hover:bg-primary-light text-white text-xs font-black uppercase tracking-widest px-8 py-4 rounded-2xl shadow-lg shadow-primary/30 transition-colors border border-primary/20"
+                  >
+                    {t('home.registerAs')}
                   </Link>
-                  <Link to="/login">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full sm:w-auto bg-white/80 backdrop-blur-md border-2 border-border hover:border-red-200 hover:bg-red-50 text-secondary text-sm font-extrabold uppercase tracking-widest px-10 py-4 rounded-2xl shadow-sm transition-all"
-                    >
-                      {t('home.signIn')}
-                    </motion.button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                  <Link
+                    to="/login"
+                    className="block bg-surface/80 hover:bg-surface border border-white/10 hover:border-white/20 text-white text-xs font-black uppercase tracking-widest px-8 py-4 rounded-2xl backdrop-blur-md transition-colors"
+                  >
+                    {t('home.signIn')}
                   </Link>
-                </>
-              )}
-            </motion.div>
-          </motion.div>
-
-          {/* Right Spline 3D Scene */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-            className="flex-1 w-full h-[400px] lg:h-[600px] relative flex justify-center items-center"
-          >
-            {/* Glowing background behind the 3D model */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-red-200/40 to-orange-100/40 blur-3xl rounded-full scale-150 -z-10 animate-pulse"></div>
-            
-            <div className="w-full h-full relative z-10">
-              <Spline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
-            </div>
-
-            {/* Floating Glassy Badge Overlay */}
-            <motion.div 
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.8, type: "spring", stiffness: 100 }}
-              className="absolute bottom-4 left-4 lg:-left-12 border border-white/40 rounded-3xl p-6 bg-white/60 backdrop-blur-xl shadow-2xl flex flex-col gap-5 max-w-[260px]"
-            >
-              <div className="absolute -top-4 -right-4 h-12 w-12 bg-gradient-to-br from-primary to-red-600 text-white flex items-center justify-center rounded-2xl shadow-xl text-2xl">
-                🩸
-              </div>
-              <div className="flex gap-4 items-center">
-                <div className="h-12 w-12 bg-red-50 text-primary flex items-center justify-center rounded-2xl text-xl font-bold shadow-inner">
-                  🥇
-                </div>
-                <div>
-                  <h4 className="font-extrabold text-secondary text-sm">{t('home.drsTitle')}</h4>
-                  <p className="text-[9px] text-gray-500 font-bold uppercase tracking-wider mt-0.5">{t('home.drsSubtitle')}</p>
-                </div>
-              </div>
-              <div className="bg-white/80 p-3.5 rounded-2xl border border-white flex items-center justify-between text-xs font-bold shadow-sm">
-                <span className="text-gray-500">🏆 {t('home.startScore')}</span>
-                <span className="text-primary font-black text-sm">50 Points</span>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Trust Badges section with Scroll Animations */}
-      <section className="py-24 max-w-6xl mx-auto px-6 relative">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="text-center mb-16"
-        >
-          <span className="text-xs font-black uppercase tracking-[0.3em] text-primary bg-red-50 px-4 py-2 rounded-full">
-            {t('home.howItWorks')}
-          </span>
+                </motion.div>
+              </>
+            )}
+          </div>
         </motion.div>
 
-        <motion.div 
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
-        >
-          {/* Card 1 */}
+        {/* Elegant 3D conceptual animation area */}
+        <motion.div className="flex-1 flex justify-center relative" variants={itemVariants}>
+          {/* Pulsing glow background */}
+          <div className="w-80 h-80 rounded-full bg-primary/10 absolute -z-10 blur-3xl" />
+
           <motion.div 
-            variants={fadeInUp}
-            whileHover={{ y: -10 }}
-            className="group p-8 rounded-[2rem] bg-white border border-border hover:border-red-200 transition-all shadow-sm hover:shadow-2xl hover:shadow-red-500/10 flex flex-col items-center text-center relative overflow-hidden"
+            className="border border-white/5 rounded-[32px] p-8 bg-surface/50 backdrop-blur-xl shadow-2xl flex flex-col gap-6 max-w-sm w-full border-t-4 border-t-primary relative"
+            whileHover={{ y: -5, borderColor: 'rgba(255,59,48,0.2)' }}
+            transition={{ type: 'spring', stiffness: 300 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-red-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div className="h-16 w-16 bg-gradient-to-br from-red-50 to-red-100 rounded-2xl text-primary flex items-center justify-center text-2xl mb-6 shadow-inner border border-red-200 group-hover:scale-110 transition-transform duration-500">
+            {/* 3D Blood Loader inside Hero Card */}
+            <div className="flex justify-center py-4">
+              <BloodLoader3D size={130} text="" />
+            </div>
+
+            <div className="flex gap-4 items-center border-t border-white/5 pt-4">
+              <div className="h-10 w-10 bg-primary/10 text-primary flex items-center justify-center rounded-2xl text-lg font-bold border border-primary/25">
+                🥇
+              </div>
+              <div>
+                <h4 className="font-black text-white text-xs uppercase tracking-wide">{t('home.drsTitle')}</h4>
+                <p className="text-[9px] text-primary-light font-black uppercase tracking-widest mt-0.5">{t('home.drsSubtitle')}</p>
+              </div>
+            </div>
+            <p className="text-xs text-muted leading-relaxed">
+              {t('home.drsDescription')}
+            </p>
+            <div className="bg-background/80 p-3 rounded-2xl border border-white/5 flex items-center justify-between text-[11px] font-black tracking-wide">
+              <span className="text-muted">🏆 {t('home.startScore')}</span>
+              <span className="text-primary-light glow-text-primary">50 Points</span>
+            </div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Trust Badges section */}
+      <section className="py-20 border-t border-white/5 max-w-5xl mx-auto px-6 z-10 w-full">
+        <motion.h3 
+          className="text-center text-xs font-black uppercase tracking-[0.25em] text-primary-light mb-16 glow-text-primary"
+          variants={itemVariants}
+        >
+          {t('home.howItWorks')}
+        </motion.h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <motion.div 
+            className="p-8 rounded-[24px] bg-surface/40 border border-white/5 hover:border-primary/20 transition-all hover:bg-surface/60 flex flex-col items-center text-center shadow-lg"
+            variants={itemVariants}
+            whileHover={{ y: -6, boxShadow: '0 10px 30px rgba(255,59,48,0.1)' }}
+          >
+            <div className="h-14 w-14 bg-primary/10 rounded-2xl text-primary flex items-center justify-center text-2xl mb-6 shadow-inner border border-primary/20">
               <LuHeart />
             </div>
-            <h4 className="font-extrabold text-secondary text-lg mb-3">{t('home.instantDonorMatchingTitle')}</h4>
-            <p className="text-sm text-gray-500 leading-relaxed font-medium">
+            <h4 className="font-extrabold text-white text-base tracking-tight">{t('home.instantDonorMatchingTitle')}</h4>
+            <p className="text-xs text-muted mt-3 leading-relaxed font-medium">
               {t('home.instantDonorMatchingDescription')}
             </p>
           </motion.div>
 
-          {/* Card 2 */}
           <motion.div 
-            variants={fadeInUp}
-            whileHover={{ y: -10 }}
-            className="group p-8 rounded-[2rem] bg-white border border-border hover:border-red-200 transition-all shadow-sm hover:shadow-2xl hover:shadow-red-500/10 flex flex-col items-center text-center relative overflow-hidden"
+            className="p-8 rounded-[24px] bg-surface/40 border border-white/5 hover:border-primary/20 transition-all hover:bg-surface/60 flex flex-col items-center text-center shadow-lg"
+            variants={itemVariants}
+            whileHover={{ y: -6, boxShadow: '0 10px 30px rgba(255,59,48,0.1)' }}
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-red-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div className="h-16 w-16 bg-gradient-to-br from-red-50 to-red-100 rounded-2xl text-primary flex items-center justify-center text-2xl mb-6 shadow-inner border border-red-200 group-hover:scale-110 transition-transform duration-500">
+            <div className="h-14 w-14 bg-primary/10 rounded-2xl text-primary-light flex items-center justify-center text-2xl mb-6 shadow-inner border border-primary/20">
               <LuActivity />
             </div>
-            <h4 className="font-extrabold text-secondary text-lg mb-3">{t('home.realtimeSocketsTitle')}</h4>
-            <p className="text-sm text-gray-500 leading-relaxed font-medium">
+            <h4 className="font-extrabold text-white text-base tracking-tight">{t('home.realtimeSocketsTitle')}</h4>
+            <p className="text-xs text-muted mt-3 leading-relaxed font-medium">
               {t('home.realtimeSocketsDescription')}
             </p>
           </motion.div>
 
-          {/* Card 3 */}
           <motion.div 
-            variants={fadeInUp}
-            whileHover={{ y: -10 }}
-            className="group p-8 rounded-[2rem] bg-white border border-border hover:border-red-200 transition-all shadow-sm hover:shadow-2xl hover:shadow-red-500/10 flex flex-col items-center text-center relative overflow-hidden"
+            className="p-8 rounded-[24px] bg-surface/40 border border-white/5 hover:border-primary/20 transition-all hover:bg-surface/60 flex flex-col items-center text-center shadow-lg"
+            variants={itemVariants}
+            whileHover={{ y: -6, boxShadow: '0 10px 30px rgba(255,59,48,0.1)' }}
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-red-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div className="h-16 w-16 bg-gradient-to-br from-red-50 to-red-100 rounded-2xl text-primary flex items-center justify-center text-2xl mb-6 shadow-inner border border-red-200 group-hover:scale-110 transition-transform duration-500">
+            <div className="h-14 w-14 bg-primary/10 rounded-2xl text-primary flex items-center justify-center text-2xl mb-6 shadow-inner border border-primary/20">
               <LuShieldCheck />
             </div>
-            <h4 className="font-extrabold text-secondary text-lg mb-3">{t('home.securityBadgesTitle')}</h4>
-            <p className="text-sm text-gray-500 leading-relaxed font-medium">
+            <h4 className="font-extrabold text-white text-base tracking-tight">{t('home.securityBadgesTitle')}</h4>
+            <p className="text-xs text-muted mt-3 leading-relaxed font-medium">
               {t('home.securityBadgesDescription')}
             </p>
           </motion.div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Footer Info */}
-      <footer className="bg-secondary text-white py-12 px-6 border-t border-gray-800 mt-auto">
+      <footer className="bg-surface/80 backdrop-blur-md text-white py-12 px-6 border-t border-white/5 mt-auto z-10">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 bg-white/10 rounded-xl flex items-center justify-center text-xl">
-              🩸
-            </div>
-            <span className="font-extrabold tracking-widest uppercase text-sm">{t('home.footerTitle')}</span>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl animate-pulse">🩸</span>
+            <span className="font-black tracking-wider text-sm uppercase">{t('home.footerTitle')}</span>
           </div>
-          <p className="text-xs font-semibold tracking-wider text-gray-400">
+          <p className="text-xs text-muted font-medium">
             {t('home.footerText')}
           </p>
         </div>
       </footer>
-    </div>
+    </motion.div>
   );
 };
 
