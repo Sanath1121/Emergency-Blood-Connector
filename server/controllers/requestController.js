@@ -138,7 +138,7 @@ const getRequestById = async (req, res) => {
     const request = await BloodRequest.findById(req.params.id)
       .populate('postedBy', 'name email city phone')
       .populate('matchedDonor', 'name email city phone drsScore totalDonations badges')
-      .populate('respondedDonors', 'name email city drsScore totalDonations badges');
+      .populate('respondedDonors', 'name email city phone drsScore totalDonations badges');
 
     if (!request) {
       return res.status(404).json({ success: false, message: 'Request not found' });
@@ -175,6 +175,13 @@ const getRequestById = async (req, res) => {
     // Hide matchedDonor phone if not creator/admin
     if (requestData.matchedDonor && !isCreator) {
       delete requestData.matchedDonor.phone;
+    }
+    
+    // Hide phone for respondedDonors if not creator/admin
+    if (!isCreator && requestData.respondedDonors) {
+      requestData.respondedDonors.forEach(donor => {
+        delete donor.phone;
+      });
     }
 
     res.json({

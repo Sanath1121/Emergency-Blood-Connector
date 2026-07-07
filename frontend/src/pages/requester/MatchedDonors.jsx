@@ -24,8 +24,23 @@ const MatchedDonors = () => {
     try {
       const res = await api.get(`/requests/${id}`);
       if (res.data.success) {
-        setRequest(res.data.data.request);
-        setMatchedDonors(res.data.data.matchedDonorsList || []);
+        const reqData = res.data.data.request;
+        setRequest(reqData);
+        
+        // Merge respondedDonors and matchedDonorsList (remove duplicates)
+        const responded = reqData.respondedDonors || [];
+        const topEligible = res.data.data.matchedDonorsList || [];
+        
+        const merged = [...responded];
+        const respondedIds = new Set(responded.map(d => d._id.toString()));
+        
+        topEligible.forEach(d => {
+          if (!respondedIds.has(d._id.toString())) {
+            merged.push(d);
+          }
+        });
+        
+        setMatchedDonors(merged);
       }
     } catch (error) {
       console.error('Error fetching matches:', error);
@@ -121,10 +136,10 @@ const MatchedDonors = () => {
               </h3>
 
               {matchedDonors.length === 0 ? (
-                <div className="flex flex-col items-center justify-center text-center p-8 bg-white border border-border rounded-2xl min-h-60 shadow-sm">
+                <div className="flex flex-col items-center justify-center text-center p-8 bg-black/40 border border-border rounded-2xl min-h-60 shadow-sm backdrop-blur-sm">
                   <span className="text-4xl mb-3">🔍</span>
-                  <h4 className="font-bold text-secondary text-sm">{t('requester.noCompatibleDonors')}</h4>
-                  <p className="text-xs text-gray-500 max-w-md mt-1 leading-relaxed">
+                  <h4 className="font-bold text-white text-sm">{t('requester.noCompatibleDonors')}</h4>
+                  <p className="text-xs text-gray-300 max-w-md mt-2 leading-relaxed">
                     {t('requester.noCompatibleDonorsDescription')}
                   </p>
                 </div>
@@ -160,6 +175,12 @@ const MatchedDonors = () => {
                               <span>•</span>
                               <span>{t('requester.donationsSaved')}: <strong className="text-secondary">{donor.totalDonations}</strong></span>
                             </div>
+                            
+                            {respondedToThis && donor.phone && (
+                              <div className="mt-2 text-xs font-bold text-primary">
+                                📞 Contact: <strong className="text-secondary select-all">{donor.phone}</strong>
+                              </div>
+                            )}
                           </div>
                         </div>
 
